@@ -40,20 +40,10 @@
           </el-table-column>
 
         </el-table> -->
-        <el-divider content-position="left">试卷提交</el-divider>
+        <el-divider content-position="left">业绩提交</el-divider>
         <!-- {{isFile}} -->
 
-        <div class="file"
-             v-if="isFile">
-          <span> 333请选择文件进行上传吧！</span>
-          <input type="file"
-                 id="excel-file"
-                 @change="addData($event)"
-                 ref="dataFile">
-
-        </div>
-        <div class="file"
-             v-if="!isFile">
+        <div class="file">
           <span> 请选择文件进行上传吧！</span>
           <input type="file"
                  id="excel-file"
@@ -62,7 +52,7 @@
 
         </div>
         <el-button type="primary"
-                   @click="postList(($event))">立即上传试卷</el-button>
+                   @click="postList(($event))">立即上传业绩表</el-button>
         <el-divider></el-divider>
 
         <el-table :data="tableData"
@@ -184,24 +174,25 @@ export default {
 
         console.log(persons);
 
-        _this.tableData = persons
-        console.log(persons);
+        _this.tableData = []
 
-        _this.tableData.forEach((item, index) => {
 
-          _this.tableData[index].shopkeeperWangWang = item.掌柜旺旺
-          _this.tableData[index].serviceCharge = item.服务费率
-          _this.tableData[index].shopID = item.商品ID
-          _this.tableData[index].shopInfo = item.商品信息
-          _this.tableData[index].affiliatedShop = item.所属店铺
-          // _this.tableData[index].issueNumberd = item.出单数量
-          // _this.tableData[index].estimatePay = item.预估付款
-          // _this.tableData[index].estimateMoney = item.预估结算
-
-          _this.tableData[index].issueNumberd = item.商品数
-          _this.tableData[index].estimatePay = item.预估付款服务费
-          _this.tableData[index].estimateMoney = item.预估结算服务费
-
+        persons.forEach((item, index) => {
+          let row = {
+            shopkeeperWangWang: item.掌柜旺旺,
+            serviceCharge: item.服务费率,
+            shopID: item.商品ID,
+            shopInfo: item.商品信息,
+            affiliatedShop: item.所属店铺,
+            issueNumber: item.商品数,
+            estimatePay: item.预估付款服务费,
+            estimateMoney: item.预估结算服务费,
+          }
+          _this.tableData.push(row)
+          console.log("_this.tableData=====", _this.tableData);
+          //issueNumber = item.出单数量
+          //estimatePay = item.预估付款
+          //estimateMoney = item.预估结算
           // 商品数
           // id 用户ID
           // shopkeeperWangWang 掌柜旺旺
@@ -212,8 +203,8 @@ export default {
 
 
           //                    出单数量 issueNumber
-//                   预估付款 estimatePay
-//                   预估结算  estimateMoney
+          //                   预估付款 estimatePay
+          //                   预估结算  estimateMoney
 
 
         })
@@ -228,7 +219,7 @@ export default {
     postList (e) {
 
       if (this.tableData.length == 0) {
-        this.$message.error('请添加试卷后在点击上传')
+        this.$message.error('请添加业绩表后在点击上传')
         return false;
       }
       OneSubjectImport({ data: this.tableData }).then(res => {

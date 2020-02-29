@@ -30,107 +30,35 @@ export default new Router({
                 },
 
                 {
-                    path: '/UserAdd',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/User/UserAdd.vue'),
+                    path: '/userAdd',
+                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/user/userAdd.vue'),
                     meta: {
-                        title: '用户添加'
+                        title: '团队成员添加'
                     }
                 },
                 {
-                    path: '/UserList',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/User/UserList.vue'),
+                    path: '/userList',
+                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/user/userList.vue'),
                     meta: {
-                        title: '列表'
+                        title: '团队成员列表'
                     }
                 },
-                {
-                    path: '/SingleAdd',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/Subject/SingleAdd.vue'),
-                    meta: {
-                        title: '单个试题添加'
-                    }
-                },
-                {
-                    path: '/OneSubjectImport',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/Subject/OneSubjectImport.vue'),
-                    meta: {
-                        title: '试卷导入'
-                    }
-                },
-                {
-                    path: '/SubjectList',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/Subject/SubjectList.vue'),
-                    meta: {
-                        title: '试卷列表'
-                    }
-                },
+                // 团队员工管理
                 {
                     path: '/addSingle',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/Single/addSingle.vue'),
+                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/single/addSingle.vue'),
                     meta: {
-                        title: '添加单'
+                        title: '添加录单'
                     }
                 },
-
-
-
 
                 {
                     path: '/documentary',
-                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/Single/documentary.vue'),
+                    component: () => import( /* webpackChunkName: "table" */ '../components/admin/single/documentary.vue'),
                     meta: {
                         title: '跟单列表'
                     }
                 },
-
-                // {
-                //     path: '/UserOpinion',
-                //     component: () => import( /* webpackChunkName: "table" */ '../components/admin/Opinion/UserOpinion.vue'),
-                //     meta: {
-                //         title: '用户意见反馈'
-                //     }
-                // },
-                // {
-                //     path: '/Column',
-                //     component: () => import( /* webpackChunkName: "table" */ '../components/admin/ColumnManagement/Column/Column.vue'),
-                //     meta: {
-                //         title: '二级栏目列表'
-                //     }
-                // },
-                // {
-                //     path: '/TopColumn',
-                //     component: () => import( /* webpackChunkName: "table" */ '../components/admin/ColumnManagement/TopColumn/TopColumn.vue'),
-                //     meta: {
-                //         title: '一级栏目列表'
-                //     }
-                // },
-                // {
-                //     path: '/ColumnManagement',
-                //     component: () => import(/* webpackChunkName: "table" */ '../components/admin/TopColumn/TopColumn.vue'),
-                //     meta: { title: '栏目管理' }
-                // },
-
-
-                //管理员列表
-                // {
-                //     path: '/AdministratorsList',
-                //     component: () => import(/* webpackChunkName: "table" */ '../components/admin/Administrators/AdministratorsList.vue'),
-                //     meta: { title: '管理员列表' }
-                // },
-                // //管理员添加
-
-                // {
-                //     path: '/AdministratorsAdd',
-                //     component: () => import(/* webpackChunkName: "table" */ '../components/admin/Administrators/AdministratorsList.vue'),
-                //     meta: { title: '管理员添加' }
-                // },
-                // {
-                //     path: '/UserVip',
-                //     component: () => import( /* webpackChunkName: "table" */ '../components/admin/UserVip/UserVip.vue'),
-                //     meta: {
-                //         title: 'Vip等级管理'
-                //     }
-                // },
 
 
                 {
@@ -147,108 +75,12 @@ export default new Router({
                         title: '业绩概括'
                     }
                 },
-                //
-                /*
-                所有考生的考试成绩
-                所有考生收藏的题目
-                用户考试成绩一览
-                
-                */
-
-
-
-
-
 
                 {
                     path: '/icon',
                     component: () => import( /* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: {
                         title: '自定义图标'
-                    }
-                },
-                // {
-                //     path: '/table',
-                //     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                //     meta: { title: '基础表格' }
-                // },
-                {
-                    path: '/tabs',
-                    component: () => import( /* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
-                    meta: {
-                        title: 'tab选项卡'
-                    }
-                },
-                {
-                    path: '/form',
-                    component: () => import( /* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                    meta: {
-                        title: '基本表单'
-                    }
-                },
-                {
-                    // 富文本编辑器组件
-                    path: '/editor',
-                    component: () => import( /* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
-                    meta: {
-                        title: '富文本编辑器'
-                    }
-                },
-                {
-                    // markdown组件
-                    path: '/markdown',
-                    component: () => import( /* webpackChunkName: "markdown" */ '../components/page/Markdown.vue'),
-                    meta: {
-                        title: 'markdown编辑器'
-                    }
-                },
-                {
-                    // 图片上传组件
-                    path: '/upload',
-                    component: () => import( /* webpackChunkName: "upload" */ '../components/page/Upload.vue'),
-                    meta: {
-                        title: '文件上传'
-                    }
-                },
-                {
-                    // vue-schart组件
-                    path: '/charts',
-                    component: () => import( /* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),
-                    meta: {
-                        title: 'schart图表'
-                    }
-                },
-                {
-                    // 拖拽列表组件
-                    path: '/drag',
-                    component: () => import( /* webpackChunkName: "drag" */ '../components/page/DragList.vue'),
-                    meta: {
-                        title: '拖拽列表'
-                    }
-                },
-                {
-                    // 拖拽Dialog组件
-                    path: '/dialog',
-                    component: () => import( /* webpackChunkName: "dragdialog" */ '../components/page/DragDialog.vue'),
-                    meta: {
-                        title: '拖拽弹框'
-                    }
-                },
-                {
-                    // 国际化组件
-                    path: '/i18n',
-                    component: () => import( /* webpackChunkName: "i18n" */ '../components/page/I18n.vue'),
-                    meta: {
-                        title: '国际化'
-                    }
-                },
-                {
-                    // 权限页面
-                    path: '/permission',
-                    component: () => import( /* webpackChunkName: "permission" */ '../components/page/Permission.vue'),
-                    meta: {
-                        title: '权限测试',
-                        permission: true
                     }
                 },
                 {
@@ -265,13 +97,6 @@ export default new Router({
                         title: '403'
                     }
                 },
-                {
-                    path: '/donate',
-                    component: () => import( /* webpackChunkName: "donate" */ '../components/page/Donate.vue'),
-                    meta: {
-                        title: '支持作者'
-                    }
-                }
             ]
         },
         {

@@ -80,15 +80,15 @@ export default {
         {
           icon: 'el-icon-lx-copy',
           index: 'tabs',
-          title: '用户管理',
+          title: '团队员工管理',
           subs: [
             {
               index: 'UserAdd',
-              title: '用户添加'
+              title: '团队成员添加'
             },
             {
               index: 'UserList',
-              title: '用户列表'
+              title: ' 团队成员列表'
             },
             // {
             //   index: 'UserList',
@@ -142,12 +142,12 @@ export default {
         {
           icon: 'el-icon-lx-calendar',
           index: 'a',
-          title: '单管理',
+          title: '录单&跟单管理',
           subs: [
             {
               icon: 'el-icon-lx-copy',
               index: 'addSingle',
-              title: '添加单'
+              title: '添加录单'
             },
             {
               icon: 'el-icon-lx-copy',

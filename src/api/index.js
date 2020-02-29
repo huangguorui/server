@@ -46,7 +46,16 @@ export const getdocumentaryList = query => {
         params: query
     });
 };
-//删除用户
+//添加 and 删除单
+export const postDocumentarySave = query => {
+    return request({
+        url: '/documentary/documentary-save',
+        method: 'post',
+        params: query
+    });
+};
+
+//删除单
 export const postDocumentaryDel = query => {
     return request({
         url: '/documentary/documentary-del',
@@ -57,8 +66,14 @@ export const postDocumentaryDel = query => {
 
 
 
-
-
+//业绩概括列表
+export const getUserOrderList = query => {
+    return request({
+        url: '/userorder/user-order-list',
+        method: 'get',
+        params: query
+    });
+};
 
 
 

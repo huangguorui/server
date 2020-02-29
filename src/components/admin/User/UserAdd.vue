@@ -16,7 +16,7 @@
               <el-form :model="ruleForm"
                        :rules="rules"
                        ref="ruleForm"
-                       label-width="150px"
+                       label-width="100px"
                        class="demo-ruleForm">
 
                 <el-form-item label="用户电话"
@@ -24,7 +24,7 @@
                   <el-input v-model.number="ruleForm.userPhone"></el-input>
                 </el-form-item>
 
-                <el-form-item label="用户真实姓名"
+                <el-form-item label="用户姓名"
                               prop="userName">
                   <el-input v-model="ruleForm.userName"></el-input>
                 </el-form-item>
@@ -60,7 +60,7 @@
 <script>
 import { UserSave, UserInfo } from '../../../api/index';
 export default {
-  name: 'UserAdd',
+  name: 'userAdd',
   data () {
     return {
       isShowDrawer: false,
@@ -103,10 +103,11 @@ export default {
         if (valid) {
           UserSave(this.ruleForm).then(res => {
             console.log("res=", res)
+            if (res) {
+              this.ruleForm = {}
+              this.active.success()
+            }
 
-            this.active.success()
-            this.ruleForm = {}
-            this.active.success()
           });
         } else {
           console.log('error submit!!');

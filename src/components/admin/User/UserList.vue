@@ -12,20 +12,36 @@
         <el-button type="primary"
                    icon="el-icon-delete"
                    class="handle-del mr10"
+                   size="mini"
                    :disabled="isBtnDisable"
                    @click="delAllSelection">批量删除</el-button>
 
-        <el-input v-model="query.search"
+        <el-input v-model="searchForm.userName"
                   clearable
                   @input="handleSearch"
-                  placeholder="请输入手机号或用户昵称"
-                  style="width:200px"
+                  size="mini"
+                  placeholder="请输入队员名称"
+                  style="width:150px"
                   class="handle-input mr10"></el-input>
+
+        <el-date-picker v-model="searchForm.userRegTime"
+                        type="date"
+                        @input="handleSearch"
+                        size="mini"
+                        clearable
+                        style="width:150px"
+                        class="mr10"
+                        @on-change="searchForm.userRegTime=$event"
+                        format="yyyy-MM-dd"
+                        placeholder="创建时间">
+        </el-date-picker>
 
         <el-button type="primary"
                    icon="el-icon-search"
+                   size="mini"
                    @click="handleSearch">搜索</el-button>
         <el-button type="primary"
+                   size="mini"
                    @click="add">添加用户</el-button>
       </div>
       <el-table :data="tableData"
@@ -71,14 +87,9 @@
         </el-table-column>
 
       </el-table>
-      <div class="pagination">
-        <el-pagination background
-                       layout="total, prev, pager, next"
-                       :current-page="query.page"
-                       :page-size="query.page_size"
-                       :total="query.count"
-                       @current-change="handlePageChange"></el-pagination>
-      </div>
+
+      <pagination :page-info="query"></pagination>
+
     </div>
     <DrawerModel :for-data="formData"
                  @closeDraw="closeDraw"
@@ -122,7 +133,7 @@ import set from '@/common/mixins/set'
 
 import { UserSave, UserDel, UserList } from '../../../api/index';
 export default {
-  name: 'UserList',
+  name: 'userList',
   data () {
     return {
       formData: {

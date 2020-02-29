@@ -12,20 +12,48 @@
         <el-button type="primary"
                    icon="el-icon-delete"
                    class="handle-del mr10"
+                   size="mini"
                    :disabled="isBtnDisable"
                    @click="delAllSelection">批量删除</el-button>
 
-        <el-input v-model="query.search"
+        <el-input v-model="searchForm.shopkeeperWangWang"
                   clearable
                   @input="handleSearch"
-                  placeholder="请输入手机号或用户昵称"
-                  style="width:200px"
+                  size="mini"
+                  placeholder="掌柜旺旺名"
+                  style="width:150px"
                   class="handle-input mr10"></el-input>
+
+        <el-select v-model="searchForm.userName"
+                   placeholder="接单人"
+                   class="mr10"
+                   @input="handleSearch"
+                   style="width:150px"
+                   size="mini">
+          <el-option :label="item.userName"
+                     v-for="item in userList"
+                     :keys="item.id"
+                     :value="item.userName"></el-option>
+        </el-select>
+
+        <el-select v-model="searchForm.commission"
+                   placeholder="佣金比例"
+                   class="mr10"
+                   @input="handleSearch"
+                   style="width:150px"
+                   size="mini">
+          <el-option :label="item.commissionList"
+                     v-for="item in commissionList"
+                     :keys="item.id"
+                     :value="item.text">>={{item.text}}</el-option>
+        </el-select>
 
         <el-button type="primary"
                    icon="el-icon-search"
+                   size="mini"
                    @click="handleSearch">搜索</el-button>
         <el-button type="primary"
+                   size="mini"
                    @click="add">添加用户</el-button>
       </div>
       <el-table :data="tableData"
@@ -48,24 +76,42 @@
 
         </el-table-column>
 
-        <el-table-column prop="userID"
+        <el-table-column prop="userName"
                          label="接单人姓名"></el-table-column>
 
-        <el-table-column prop="activityID"
-                         label="活动ID"></el-table-column>
+        <el-table-column prop="orderPhone"
+                         label="店铺联系人"></el-table-column>
+        <el-table-column prop="shopLink"
+                         label="商品链接"></el-table-column>
+        <el-table-column prop="couponLink"
+                         label="优惠券链接"></el-table-column>
+        <el-table-column prop="couponStartTime"
+                         width="150"
+                         label="优惠券开始时间"></el-table-column>
 
-        <el-table-column prop="activityLink"
-                         label="活动链接	"></el-table-column>
-
+        <el-table-column prop="couponEndTime"
+                         width="150"
+                         label="优惠券结束时间"></el-table-column>
         <el-table-column prop="activityStartTime"
-                         label="开始时间	"></el-table-column>
+                         width="150"
+                         label="活动开始时间"></el-table-column>
         <el-table-column prop="activityEndTime"
-                         label="结束时间	"></el-table-column>
+                         width="150"
+                         label="活动结束时间"></el-table-column>
+
         <el-table-column prop="commission"
-                         label="佣金+服务费%	"></el-table-column>
+                         label="佣金+服务费%"></el-table-column>
         <el-table-column prop="documentaryTime"
                          label="添加时间"></el-table-column>
 
+        <el-table-column prop="shopName"
+                         label="店铺名称"></el-table-column>
+        <el-table-column prop="activityID"
+                         label="活动ID"></el-table-column>
+        <el-table-column prop="activityLink"
+                         label="活动链接"></el-table-column>
+        <el-table-column prop="remarks"
+                         label="备注"></el-table-column>
         <el-table-column label="操作"
                          width="150">
           <template slot-scope="scope">
@@ -78,16 +124,12 @@
         </el-table-column>
 
       </el-table>
-      <div class="pagination">
-        <el-pagination background
-                       layout="total, prev, pager, next"
-                       :current-page="query.page"
-                       :page-size="query.page_size"
-                       :total="query.count"
-                       @current-change="handlePageChange"></el-pagination>
-      </div>
+
+      <!-- 分页 -->
+      <pagination :page-info="query"></pagination>
+
     </div>
-    <DrawerModel :for-data="formData"
+    <!-- <DrawerModel :for-data="formData"
                  @closeDraw="closeDraw"
                  :drawerTitle="drawerTitle "
                  @applySubmit="applySubmit"
@@ -109,7 +151,7 @@
                         prop="userName">
             <el-input v-model="formData.userName"></el-input>
           </el-form-item>
-          <!-- @on-change="formData.user_birthday=$event" -->
+       
 
           <el-form-item label="用户密码"
                         prop="userPwd">
@@ -119,7 +161,7 @@
 
         </el-form>
       </template>
-    </DrawerModel>
+    </DrawerModel> -->
   </div>
 </template>
 
@@ -127,7 +169,7 @@
 import interList from '@/common/mixins/list'
 import set from '@/common/mixins/set'
 
-import { UserSave, postDocumentaryDel, getdocumentaryList } from '../../../api/index';
+import { UserSave, postDocumentaryDel, getdocumentaryList, UserList } from '../../../api/index';
 export default {
   name: 'getdocumentaryList',
   data () {
@@ -161,29 +203,61 @@ export default {
       tableData: [
         {
           id: '',
-          shopkeeperWangWang: "",
-          orderPhone: "",
-          shopLink: "",
-          coupon: "",
-          activityStartTime: "",
-          activityEndTime: "",
-          commission: "",
+          shopkeeperWangWang: "", //根据掌柜旺旺
+          orderPhone: "",       //店铺联系人
+          shopLink: "",         //商品链接
+          couponLink: "",         //优惠券链接
+          couponStartTime: "",    //优惠券开始时间
+          couponEndTime: "",     //优惠券结束时间
+          activityStartTime: "",  //活动开始时间
+          activityEndTime: "", //活动结束时间
+          commission: "",    //佣金+服务费
           userID: "",
-          shopName: "",
-          activityID: "",
-          activityLink: "",
-          remarks: "",
-          documentaryTime: "",
+          shopName: "",    //店铺名称
+          activityID: "", //活动ID
+          activityLink: "",//活动链接
+          remarks: "",     //备注
+          documentaryTime: "",  //订单生产时间，后台生成
         }
       ], //当前表数据
+      userList: [],  //用户列表
+      commissionList: [
+        {
+          id: 0,
+          text: '5',
+        },
+        {
+          id: 1,
+          text: '10',
+        },
+        {
+          id: 2,
+          text: '20',
+        },
+        {
+          id: 3,
+          text: '30',
+        },
+      ],  //佣金比例列表
       editVisible: false, //弹框删除
     };
   },
   mixins: [interList],
   created () {
     this.getData();
+
+    UserList({ page_size: 100 }).then(res => {
+      this.userList = res.list;
+
+    }).catch(function (error) {
+      this.active.error()
+    })
+
   },
   methods: {
+
+
+
     add () {
       this.formData = {}
       this.isShowDrawer = true
