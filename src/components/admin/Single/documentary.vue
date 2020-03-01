@@ -169,9 +169,9 @@
 import interList from '@/common/mixins/list'
 import set from '@/common/mixins/set'
 
-import { UserSave, postDocumentaryDel, getdocumentaryList, UserList } from '../../../api/index';
+import { UserSave, postDocumentaryDel, getDocumentarysList, UserList } from '../../../api/index';
 export default {
-  name: 'getdocumentaryList',
+  name: 'getDocumentarysList',
   data () {
     return {
       formData: {
@@ -264,9 +264,13 @@ export default {
     },
 
     edlt (row) {
-      this.drawerTitle = '编辑用户信息'
-      this.formData = Object.assign({}, row)
-      this.isShowDrawer = true
+      console.log(row)
+      this.$router.push({  //核心语句
+        path: '/addSingle',   //跳转的路径
+        query: {           //路由传参时push和query搭配使用 ，作用时传递参数
+          id: row.id,
+        }
+      })
     },
     applySubmit (data, formName) {
       this.$refs[formName].validate((valid) => {
@@ -296,7 +300,7 @@ export default {
     getData () {
       let _this = this
       this.loading = true
-      getdocumentaryList(this.query).then(res => {
+      getDocumentarysList(this.query).then(res => {
         this.tableData = res.list;
         this.query = res.page_info
         this.loading = false

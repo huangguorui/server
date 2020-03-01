@@ -36,12 +36,11 @@
                 </el-form-item> -->
                 <el-form-item label="掌柜旺旺"
                               prop="shopkeeperWangWang">
-                  <el-input v-model="ruleForm.shopkeeperWangWang" />
-                  一次性录入多个，请用“|”进行分隔，如 旺旺1|旺旺2
+                  <el-input v-model.trim="ruleForm.shopkeeperWangWang" />
                 </el-form-item>
 
                 <el-form-item label="用户姓名"
-                              prop="region">
+                              prop="userID">
                   <el-select v-model="ruleForm.userID"
                              placeholder="请选择活动区域">
                     <el-option :label="item.userName"
@@ -56,13 +55,16 @@
               <div class="grid-content bg-purple-light">
                 <el-divider content-position="left"> 选填项（非必填，录单跟单使用）</el-divider>
 
-                <el-form-item label="联系方式">
+                <el-form-item label="联系方式"
+                              prop="orderPhone">
                   <el-input v-model="ruleForm.orderPhone" />
                 </el-form-item>
-                <el-form-item label="商品链接">
+                <el-form-item label="商品链接"
+                              prop="shopLink">
                   <el-input v-model="ruleForm.shopLink" />
                 </el-form-item>
-                <el-form-item label="店铺名称">
+                <el-form-item label="店铺名称"
+                              prop="shopName">
                   <el-input v-model="ruleForm.shopName" />
                 </el-form-item>
 
@@ -76,7 +78,8 @@
                   </el-radio-group>
                 </el-form-item> -->
 
-                <el-form-item label="优惠券链接">
+                <el-form-item label="优惠券链接"
+                              prop="couponLink">
                   <el-input v-model="ruleForm.couponLink" />
                 </el-form-item>
 
@@ -96,20 +99,26 @@
                                     style="width: 100%;" />
                   </el-col>
                 </el-form-item> -->
-                <el-form-item label="优惠券时间">
+                <el-form-item label="优惠券时间"
+                              prop="couponTime">
                   <!-- 时间注意识别 -->
                   <el-date-picker v-model="ruleForm.couponTime"
+                                  @input="defaultTime"
+                                  @on-change="ruleForm.couponTime=$event"
                                   style="width:100%"
-                                  type="datetimerange"
+                                  type="daterange"
                                   range-separator="至"
-                                  start-placeholder="优惠券开始时间"
-                                  end-placeholder="优惠券结束时间">
+                                  start-placeholder="开始日期"
+                                  end-placeholder="结束日期">
                   </el-date-picker>
                 </el-form-item>
-                <el-form-item label="活动时间">
+                <el-form-item label="活动时间"
+                              prop="activityTime">
                   <el-date-picker v-model="ruleForm.activityTime"
                                   style="width:100%"
-                                  type="datetimerange"
+                                  type="daterange"
+                                  @input="defaultTime"
+                                  @on-change="ruleForm.activityTime=$event"
                                   range-separator="至"
                                   start-placeholder="开始日期"
                                   end-placeholder="结束日期">
@@ -131,17 +140,21 @@
                                     style="width: 100%;" />
                   </el-col>
                 </el-form-item> -->
-                <el-form-item label="佣金+服务费%">
+                <el-form-item label="佣金+服务费%"
+                              prop="commission">
                   <el-input v-model="ruleForm.commission" />
                 </el-form-item>
                 {{ruleForm.coupomTime}}
-                <el-form-item label="活动ID">
+                <el-form-item label="活动ID"
+                              prop="activityID">
                   <el-input v-model="ruleForm.activityID" />
                 </el-form-item>
-                <el-form-item label="活动链接">
+                <el-form-item label="活动链接"
+                              prop="activityLink">
                   <el-input v-model="ruleForm.activityLink" />
                 </el-form-item>
-                <el-form-item label="备注">
+                <el-form-item label="备注"
+                              prop="remarks">
                   <el-input type="textarea"
                             v-model="ruleForm.remarks"
                             :autosize="{ minRows: 2, maxRows: 4}"></el-input>
@@ -166,12 +179,13 @@
 
 
 <script>
-// import { getUserList } from '@/api/user'
-import { UserSave, UserList, postDocumentarySave } from '../../../api/index';
+// import { getUserList } from '@/api/user'  getDocumentaryList   报错误了
+import { UserList, getDocumentarysList, postDocumentarySave } from '../../../api/index';
 
 export default {
   data () {
     return {
+      documentaryID: '',
       ruleForm: {
         id: '',
         shopkeeperWangWang: "", //根据掌柜旺旺  1
@@ -196,61 +210,133 @@ export default {
       rules: {
         shopkeeperWangWang: [
           { required: true, message: '请输入店铺旺旺名称', trigger: 'blur' },
-          // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        // region: [
-        //   { required: true, message: '请选择活动区域', trigger: 'change' }
-        // ],
-        // date1: [
-        //   { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        // ],
-        // date2: [
-        //   { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-        // ],
-        // type: [
-        //   { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-        // ],
-        // resource: [
-        //   { required: true, message: '请选择活动资源', trigger: 'change' }
-        // ],
-        // desc: [
-        //   { required: true, message: '请填写活动形式', trigger: 'blur' }
-        // ]
+        userID: [
+          { required: true, message: '请选择用户', trigger: 'blur' },
+        ],
       }
     };
   },
   created () {
+    // 判断是否有id信息，有的话就要浮现数据
+    this.documentaryID = this.$route.query.id
     this.getDate()
+    this.edit()
   },
 
   methods: {
-    getDate () {
-      UserList({ page_size: 100 }).then(res => {
-        this.userList = res.list;
+    defaultTime () {
 
+
+      if (this.ruleForm.couponTime == null) {
+        this.ruleForm.couponStartTime = ''
+        this.ruleForm.couponEndTime = ''
+        this.ruleForm.couponTime = ['', '']
+      }
+      if (this.ruleForm.activityTime == null) {
+        this.ruleForm.activityStartTime = ''
+        this.ruleForm.activityEndTime = ''
+        this.ruleForm.activityTime = ['', '']
+      }
+      console.log(this.ruleForm.couponTime)
+
+    },
+    getDate () {
+
+      UserList({ page_size: 200 }).then(res => {
+        console.log(res)
+        this.userList = res.list;
       }).catch(function (error) {
         this.active.error()
+
       })
+      if (this.$route.query.id) {
+        getDocumentarysList({ id: this.$route.query.id }).then(res => {
+          console.log(res)
+          this.ruleForm = res.list[0]
+
+          this.ruleForm.couponTime = [this.ruleForm.couponStartTime, this.ruleForm.couponEndTime]
+          this.ruleForm.activityTime = [this.ruleForm.activityStartTime, this.ruleForm.activityEndTime]
+
+          if (this.ruleForm.couponTime != '' && this.ruleForm.couponTime != null) {
+
+            this.ruleForm.couponStartTime = this.formatDate(this.ruleForm.couponTime[0])
+            this.ruleForm.couponEndTime = this.formatDate(this.ruleForm.couponTime[1])
+          }
+          if (this.ruleForm.activityTime != '' && this.ruleForm.couponTime != null) {
+
+            this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityTime[0])
+            this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityTime[1])
+          }
+
+
+          // this.active.success()
+        })
+      }
+
+
+      // getDocumentarysList().then(res => {
+      //   // this.$refs[formName].resetFields()
+      //   console.log(res)
+      //   // this.ruleForm = res.list[0]
+      //   // this.active.success()
+      // })
+
+    },
+    edit () {
+
+
     },
     submitForm (formName) {
+
+
+      console.log(this.ruleForm)
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.ruleForm.couponTime)
+          if (this.ruleForm.couponTime != '' && this.ruleForm.couponTime != null) {
+            this.ruleForm.couponStartTime = this.ruleForm.couponTime[0]
+            this.ruleForm.couponEndTime = this.ruleForm.couponTime[1]
+          }
+
+
           // alert('submit!');
           //验证的数据中有两个数据要切换为四个数据
 
+          // if (this.ruleForm.couponTime == null) {
+          //   this.ruleForm.couponStartTime = ''
+          //   this.ruleForm.couponEndTime = ''
+          // }
 
-          this.ruleForm.couponStartTime = this.formatDate(this.ruleForm.couponTime[0])
-          this.ruleForm.couponEndTime = this.formatDate(this.ruleForm.couponTime[1])
-          this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityTime[0])
-          this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityTime[1])
+          console.log("this.ruleForm.couponTime=", this.ruleForm.couponTime)
+          if (this.ruleForm.couponTime != '' && this.ruleForm.couponTime != null) {
+            this.ruleForm.couponStartTime = this.formatDate(this.ruleForm.couponTime[0])
+            this.ruleForm.couponEndTime = this.formatDate(this.ruleForm.couponTime[1])
+          }
+          if (this.ruleForm.activityTime != '' && this.ruleForm.activityTime != null) {
+            this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityTime[0])
+            this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityTime[1])
+          }
+
+
 
 
           postDocumentarySave(this.ruleForm).then(res => {
+            if (res) {
+              this.$refs[formName].resetFields()
+              this.active.success()
 
-            console.log(res)
-            //清空数据
-            // this.$refs[formName].resetFields()
-            // this.active.success()
+              if (this.$route.query.id) {
+                this.$router.push({  //核心语句
+                  path: '/documentary',   //跳转的路径
+                  query: {           //路由传参时push和query搭配使用 ，作用时传递参数
+                  }
+                })
+              }
+
+              this.getDate()
+            }
+
           })
 
           console.log('ruleForm', this.ruleForm)
@@ -267,10 +353,15 @@ export default {
     //格式化时间
     formatDate (dataTime) {
       var d = new Date(dataTime);
-      let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+      let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
       return youWant
     },
-
+    //格式化时间
+    // formatDate (dataTime) {
+    //   var d = new Date(dataTime);
+    //   let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    //   return youWant
+    // },
 
   }
 }

@@ -39,7 +39,7 @@ import qs from 'qs'
 
 //列表 保存
 //跟单列表
-export const getdocumentaryList = query => {
+export const getDocumentarysList = query => {
     return request({
         url: '/documentary/documentary-list',
         method: 'get',
@@ -82,15 +82,34 @@ export const getExcelList = query => {
         method: 'get',
         params: query
     });
-}; 
-//excel删除
-export const postExcelDel = query => {
+};
+//excel删除 -1
+export const postExcelFalseDel = query => {
     return request({
-        url: '/excel/excel-del',
+        url: '/excel/excel-false-del',
         method: 'post',
         params: query
     });
 };
+
+export const postExcelOrderDel = query => {
+    return request({
+        url: '/excel/excel-order-del',
+        method: 'post',
+        params: query
+    });
+};
+
+//excel导出
+export const getExcelExport = query => {
+    return request({
+        url: '/excel/excel-export',
+        method: 'get',
+        params: query
+    });
+};
+
+
 
 
 

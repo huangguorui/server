@@ -10,40 +10,11 @@
     <div class="container">
       <div class="handle-box">
 
-        <!-- <el-upload class="upload-demo"
-                   drag
-                   action="https://jsonplaceholder.typicode.com/posts/"
-                   multiple>
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip"
-               slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload> -->
-
-        <!-- <ul>
-          <li v-for="(item,index) in subject"
-              :key="index">
-            题目{{index+1}} <span style="margin:15px 35px;display:inline-block;">试题名称：{{item.subjectName==0?'未指定':item.subjectName}}</span> <span style="margin:15px  25px;display:inline-block;">所属分类：{{item.columnName==0?'未指定':item.columnName}}</span>
-
-          </li>
-        </ul> -->
-
-        <!-- <el-table :data="subject"
-                  style="width: 100%">
-          <el-table-column prop="subjectName"
-                           label="试题名称"
-                           width="220">
-          </el-table-column>
-          <el-table-column prop="columnName"
-                           label="栏目名称"
-                           width="220">
-          </el-table-column>
-
-        </el-table> -->
         <el-divider content-position="left">业绩提交</el-divider>
-        <!-- {{isFile}} -->
 
         <div class="file">
+          <el-button type="primary"
+                     @click="postList(($event))">立即上传业绩表</el-button>
           <span> 请选择文件进行上传吧！</span>
           <input type="file"
                  id="excel-file"
@@ -51,10 +22,13 @@
                  ref="dataFile">
 
         </div>
-        <el-button type="primary"
-                   @click="postList(($event))">立即上传业绩表</el-button>
-        <el-divider></el-divider>
 
+        <el-button type="primary"
+                   icon="el-icon-delete"
+                   class="handle-del mr10"
+                   size="mini"
+                   :disabled="isBtnDisable"
+                   @click="delAllSelection">批量删除</el-button>
         <el-table :data="excelData"
                   v-loading="loading"
                   border
@@ -87,12 +61,14 @@
           <el-table-column label="操作"
                            width="300">
             <template slot-scope="scope">
-              <el-button size="mini">下载</el-button>
+              <el-button size="mini"
+                         @click="handleDownload(scope.row.id)">下载</el-button>
               <el-button size="mini"
                          type="danger"
                          @click="delAllSelection(scope.row.id,'single')">删除文件</el-button>
               <el-button size="mini"
-                         type="danger">删除文件+业绩</el-button>
+                         type="danger"
+                         @click="delExcelOrderDel(scope.row.id,'single')">删除文件+业绩</el-button>
             </template>
           </el-table-column>
 
@@ -155,10 +131,11 @@
 import $ from 'jquery'
 
 import XLSX from 'xlsx';
-import { getExcelList, postExcelDel, OneSubjectImport, ColumnList, SubjectList, Relation } from '@/api/index';
+import { getExcelList, postExcelFalseDel, postExcelOrderDel, getExcelExport, OneSubjectImport, ColumnList, SubjectList, Relation } from '@/api/index';
 
 
 import interList from '@/common/mixins/list'
+// import { parseTime } from '@/utils'
 
 
 export default {
@@ -176,32 +153,8 @@ export default {
           importPeople: '',
         }
       ],
-      tableData: [
-        // {
-        //   subject_name_id: '',  //本套试题所属的id
-        //   route: '',//试题所属id
-        //   type: '',//试题属性			
-        //   test_paper_name: '',//题目名
-        //   a: '',
-        //   b: '',
-        //   c: '',
-        //   d: '',
-        //   answer: '',//答案
-        //   score: '',//分数
-        // },
-        // {
-        //   subject_name_id: '',  //本套试题所属的id
-        //   route: '',//试题所属id
-        //   type: '选择题',//试题属性			
-        //   test_paper_name: '在Word的编辑状态，当前文档中有一个表格，选定列后，单击表格菜单中"删除列"命令后( )。',//题目名
-        //   a: '表格中的内容全部被删除，但表格还存在',
-        //   b: '表格和内容全部被删除',
-        //   c: '表格被删除，但表格中的内容未被删除',
-        //   d: '表格中插入点所在的列被删除',
-        //   answer: 'd',//答案
-        //   score: '2',//分数
-        // }
-      ]
+      excelExportData: [],
+      tableData: []
     }
   },
   mixins: [interList],
@@ -220,7 +173,7 @@ export default {
       })
         .then(() => {
           this.loading = true
-          postExcelDel({ id: this.DelId }).then(res => {
+          postExcelFalseDel({ id: this.DelId }).then(res => {
             this.active.success()
             this.getData()
           })
@@ -245,7 +198,6 @@ export default {
         this.loading = false
       })
     },
-
 
     addData (e) {
       console.log(e)
@@ -328,6 +280,66 @@ export default {
 
       //console.log('files',files[0].name)
     },
+    delExcelOrderDel (id, flag) {
+      //通过点击删除进来的 传入的参数必须为一个数组
+      if (flag == 'single') {
+        this.DelId = [id]
+        console.log('id', id)
+      }
+      // 二次确认删除
+      this.$confirm(`确定要删除ID序号为[${this.DelId}]`, '提示', {
+        type: 'warning'
+      })
+        .then(() => {
+          this.loading = true
+          //excel和订单统统删除
+          postExcelOrderDel({ id: this.DelId }).then(res => {
+            this.active.success()
+            this.getData()
+          })
+        })
+        .catch(() => {
+          this.loading = false
+        });
+      this.multipleSelection = [];
+    },
+
+    handleDownload (excelID) {
+      getExcelExport({ excelID: excelID }).then(res => {
+        this.excelExportData = res.list;
+        console.log("this.excelExportData=", this.excelExportData)
+        // debugger;
+        import('@/vendor/Export2Excel').then(excel => {
+          const tHeader = ['员工', '旺旺', '店铺', '出单数量', '预估付款服务费', '订单生成时间']
+
+          const filterVal = ['userName', 'shopkeeperWangWang', 'affiliatedShop', 'issueNumber', 'estimatePay', 'orderTime']
+          // const data = this.formatJson(filterVal)
+          const data = this.formatJson(filterVal)
+
+          excel.export_json_to_excel({
+            header: tHeader,
+            data,
+            filename: res.excelExportName
+          })
+        })
+
+      }).catch(function (error) {
+        this.active.error()
+      })
+    },
+    formatJson (filterVal) {
+      return this.excelExportData.map(v => filterVal.map(j => {
+
+        if (j === 'orderTime') {
+          if (v[j] == '') {
+            return v[j]
+          }
+          return this.parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    },
     postList (e) {
 
       if (this.tableData.length == 0) {
@@ -366,7 +378,51 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields();
+    },
+    /**
+     * Parse the time to string
+     * @param {(Object|string|number)} time
+     * @param {string} cFormat
+     * @returns {string | null}
+     */
+    parseTime (time, cFormat) {
+      if (arguments.length === 0) {
+        return null
+      }
+      const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+      let date
+      if (typeof time === 'object') {
+        date = time
+      } else {
+        if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+          time = parseInt(time)
+        }
+        if ((typeof time === 'number') && (time.toString().length === 10)) {
+          time = time * 1000
+        }
+        date = new Date(time)
+      }
+      const formatObj = {
+        y: date.getFullYear(),
+        m: date.getMonth() + 1,
+        d: date.getDate(),
+        h: date.getHours(),
+        i: date.getMinutes(),
+        s: date.getSeconds(),
+        a: date.getDay()
+      }
+      const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+        const value = formatObj[key]
+        // Note: getDay() returns 0 on Sunday
+        if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+        return value.toString().padStart(2, '0')
+      })
+      return time_str
     }
+
+
+
+
   }
 };
 </script>

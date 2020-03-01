@@ -74,9 +74,12 @@ export default {
     // 触发搜索按钮
     handleSearch() {
       //时间格式化
-      this.searchForm.userRegTime = this.dataFormat2(this.searchForm.userRegTime) //用户注册时间
-      this.searchForm.searchOrderStartTime = this.dataFormat2(this.searchForm.searchOrderStartTime) //订单开始时间
-      this.searchForm.searchOrderEndTime = this.dataFormat2(this.searchForm.searchOrderEndTime) //订单结束时间
+      if (this.searchForm.userRegTime)
+        this.searchForm.userRegTime = this.dataFormat2(this.searchForm.userRegTime) //用户注册时间
+      if (this.searchForm.searchOrderStartTime)
+        this.searchForm.searchOrderStartTime = this.dataFormat2(this.searchForm.searchOrderStartTime) //订单开始时间
+      if (this.searchForm.searchOrderEndTime)
+        this.searchForm.searchOrderEndTime = this.dataFormat2(this.searchForm.searchOrderEndTime) //订单结束时间
 
       let data = Object.assign(this.query, this.searchForm)
       console.log(data)
@@ -103,9 +106,12 @@ export default {
     },
     // 格式化时间
     dataFormat2: function (row, column) {
-      if (row == null) {
-        return new Date()
-      }
+      console.log(row)
+      // return false
+      // if (row == null) {
+      //   return 0
+      // }
+
       console.log("row===", row)
       var t = new Date(row); //row 表示一行数据, updateTime 表示要格式化的字段名称
       var year = t.getFullYear(),
