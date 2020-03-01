@@ -55,6 +55,65 @@
                    @click="postList(($event))">立即上传业绩表</el-button>
         <el-divider></el-divider>
 
+        <el-table :data="excelData"
+                  v-loading="loading"
+                  border
+                  class="table"
+                  size="small"
+                  ref="multipleTable"
+                  header-cell-class-name="table-header"
+                  @selection-change="handleSelectionChange">
+          <el-table-column type="selection"
+                           width="55"
+                           align="center"></el-table-column>
+          <el-table-column prop="id"
+                           label="ID"
+                           width="55"
+                           align="center"></el-table-column>
+
+          <el-table-column prop="importPeople"
+                           label="导入人">
+          </el-table-column>
+
+          <el-table-column prop="defaultFileName"
+                           label="原始文件名">
+          </el-table-column>
+          <el-table-column prop="importTime"
+                           label="导入时间">
+          </el-table-column>
+          <!-- <el-table-column prop="excelExportUrl"
+                           label="导入路径">
+          </el-table-column> -->
+          <el-table-column label="操作"
+                           width="300">
+            <template slot-scope="scope">
+              <el-button size="mini">下载</el-button>
+              <el-button size="mini"
+                         type="danger"
+                         @click="delAllSelection(scope.row.id,'single')">删除文件</el-button>
+              <el-button size="mini"
+                         type="danger">删除文件+业绩</el-button>
+            </template>
+          </el-table-column>
+
+        </el-table>
+        <div class="pagination">
+          <el-pagination background
+                         layout="total, prev, pager, next"
+                         :current-page="query.page"
+                         :page-size="query.page_size"
+                         :total="query.count"
+                         @current-change="handlePageChange"></el-pagination>
+        </div>
+        <!-- <el-table :data="excelData"
+                  stripe
+                  border
+                  size="small"
+                  v-loading="loading"
+                  style="width: 100%;margin-top:30px">
+
+        </el-table> -->
+
         <el-table :data="tableData"
                   stripe
                   style="width: 100%;margin-top:30px">
@@ -96,13 +155,27 @@
 import $ from 'jquery'
 
 import XLSX from 'xlsx';
-import { OneSubjectImport, ColumnList, SubjectList, Relation } from '@/api/index';
+import { getExcelList, postExcelDel, OneSubjectImport, ColumnList, SubjectList, Relation } from '@/api/index';
+
+
+import interList from '@/common/mixins/list'
+
 
 export default {
   name: 'basetable',
   data () {
     return {
       isFile: false,
+      defaultFileName: '',  //导入的文件名
+      excelData: [
+        {
+          id: '',
+          defaultFileName: '',
+          importTime: '',
+          excelExportUrl: '',
+          importPeople: '',
+        }
+      ],
       tableData: [
         // {
         //   subject_name_id: '',  //本套试题所属的id
@@ -131,16 +204,55 @@ export default {
       ]
     }
   },
-  created () {
-  },
+  mixins: [interList],
   methods: {
 
+    //单选多选都可删除
+    delAllSelection (id, flag) {
+      //通过点击删除进来的 传入的参数必须为一个数组
+      if (flag == 'single') {
+        this.DelId = [id]
+        console.log('id', id)
+      }
+      // 二次确认删除
+      this.$confirm(`确定要删除ID序号为[${this.DelId}]`, '提示', {
+        type: 'warning'
+      })
+        .then(() => {
+          this.loading = true
+          postExcelDel({ id: this.DelId }).then(res => {
+            this.active.success()
+            this.getData()
+          })
+        })
+        .catch(() => {
+          this.loading = false
+        });
+      this.multipleSelection = [];
+    },
+
+    //开始预加载
+    getData () {
+      let _this = this
+      this.loading = true
+      getExcelList(this.query).then(res => {
+        this.excelData = res.list;
+        this.query = res.page_info
+        this.loading = false
+
+      }).catch(function (error) {
+        this.active.error()
+        this.loading = false
+      })
+    },
 
 
     addData (e) {
+      console.log(e)
       let _this = this
       var files = e.target.files;
       console.log(' e.target.files', e.target.files)
+      this.defaultFileName = e.target.files[0].name
       var fileReader = new FileReader();
       fileReader.onload = function (ev) {
         console.log('ev', ev)
@@ -189,7 +301,7 @@ export default {
             estimateMoney: item.预估结算服务费,
           }
           _this.tableData.push(row)
-          console.log("_this.tableData=====", _this.tableData);
+          // console.log("_this.tableData=====", _this.tableData);
           //issueNumber = item.出单数量
           //estimatePay = item.预估付款
           //estimateMoney = item.预估结算
@@ -222,34 +334,22 @@ export default {
         this.$message.error('请添加业绩表后在点击上传')
         return false;
       }
-      OneSubjectImport({ data: this.tableData }).then(res => {
+      OneSubjectImport({ data: this.tableData, defaultFileName: this.defaultFileName }).then(res => {
 
         if (res == undefined) {
 
         } else {
           this.active.success()
           console.log(e)
-          //  $('.file input').remove()
-
-          // setTimeout(() => {
-          //   $('.file').append(` <input type="file"
-          //        id="excel-file"
-          //        @change="addData($event)"
-          //        ref="dataFile">`)
-          // }, 3000)
-
-          setTimeout(() => {
-            this.isFile = !this.isFile
-          }, 3000)
-          var obj = document.getElementById('excel-file');
-          obj.outerHTML = obj.outerHTML;
+          this.getData()   //发送成功，刷新界面
+          this.tableData = []
+          this.defaultFileName = ""
+          // var obj = document.getElementById('excel-file');
+          // obj.outerHTML = obj.outerHTML;
         }
 
       });
       //添加完成清空
-      this.tableData = [
-
-      ]
 
     },
 

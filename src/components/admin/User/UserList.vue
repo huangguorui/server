@@ -137,11 +137,9 @@ export default {
   data () {
     return {
       formData: {
-
         userPhone: '',//用户电话
         userName: '',//用户真实姓名
         userPwd: '',//用户密码
-
       },
       rules: {
 

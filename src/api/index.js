@@ -75,7 +75,22 @@ export const getUserOrderList = query => {
     });
 };
 
-
+//excel列表
+export const getExcelList = query => {
+    return request({
+        url: '/excel/excel-list',
+        method: 'get',
+        params: query
+    });
+}; 
+//excel删除
+export const postExcelDel = query => {
+    return request({
+        url: '/excel/excel-del',
+        method: 'post',
+        params: query
+    });
+};
 
 
 

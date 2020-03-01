@@ -150,7 +150,7 @@ export default {
 
       }).catch(function (error) {
         this.active.error()
-        _this.loading = false
+        this.loading = false
       })
     },
     //单选多选都可删除
