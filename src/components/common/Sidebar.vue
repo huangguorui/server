@@ -83,11 +83,11 @@ export default {
           title: '团队员工管理',
           subs: [
             {
-              index: 'UserAdd',
+              index: 'userAdd',
               title: '团队成员添加'
             },
             {
-              index: 'UserList',
+              index: 'userList',
               title: ' 团队成员列表'
             },
             // {
@@ -137,7 +137,6 @@ export default {
 
           ]
         },
-
 
         {
           icon: 'el-icon-lx-calendar',

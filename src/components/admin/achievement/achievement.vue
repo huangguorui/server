@@ -11,24 +11,28 @@
       <div class="handle-box">
 
         <el-divider content-position="left">业绩提交</el-divider>
-
-        <div class="file">
-          <el-button type="primary"
-                     @click="postList(($event))">立即上传业绩表</el-button>
-          <span> 请选择文件进行上传吧！</span>
-          <input type="file"
+        <!-- <span> 请选择文件进行上传吧！</span> -->
+        <el-button type="primary"
+                   @click="postList(($event))"
+                   style="margin-right:50px">立即上传业绩表</el-button>
+        <input type="file"
+               id="excel-file"
+               @change="addData($event)"
+               ref="dataFile">
+        <!-- <input type="file"
                  id="excel-file"
                  @change="addData($event)"
-                 ref="dataFile">
+                 ref="dataFile"> -->
 
+        <div>
+          <el-button type="primary"
+                     icon="el-icon-delete"
+                     class="handle-del mr10"
+                     size="mini"
+                     style="margin:10px 0"
+                     :disabled="isBtnDisable"
+                     @click="delAllSelection">批量删除</el-button>
         </div>
-
-        <el-button type="primary"
-                   icon="el-icon-delete"
-                   class="handle-del mr10"
-                   size="mini"
-                   :disabled="isBtnDisable"
-                   @click="delAllSelection">批量删除</el-button>
         <el-table :data="excelData"
                   v-loading="loading"
                   border
@@ -272,9 +276,10 @@ export default {
 
 
         })
+        console.log('this.tableData', this.tableData)
+
       };
 
-      console.log('this.tableData', this.tableData)
       // 以二进制方式打开文件
       fileReader.readAsBinaryString(files[0]);
 
@@ -341,7 +346,7 @@ export default {
       }))
     },
     postList (e) {
-
+      console.log("this.tableData", this.tableData)
       if (this.tableData.length == 0) {
         this.$message.error('请添加业绩表后在点击上传')
         return false;
@@ -455,5 +460,22 @@ export default {
     margin: auto;
     width: 40px;
     height: 40px;
+}
+.file {
+    display: inline-block;
+}
+.file input {
+    /* width: 260px; */
+    background: #409eff;
+    /* height: 50px; */
+    /* background: red; */
+    /* text-align: center; */
+    /* padding-top: 10px; */
+    padding: 3px;
+    margin-right: 30px;
+    /* background: red; */
+    color: #fff;
+    border-radius: 5px;
+    padding-left: 30px;
 }
 </style>

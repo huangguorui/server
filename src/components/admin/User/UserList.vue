@@ -88,7 +88,13 @@
 
       </el-table>
 
-      <pagination :page-info="query"></pagination>
+      <!-- <pagination :page-info="query"></pagination> -->
+      <el-pagination background
+                       layout="total, prev, pager, next"
+                       :current-page="query.page"
+                       :page-size="query.page_size"
+                       :total="query.count"
+                       @current-change="handlePageChange"></el-pagination>
 
     </div>
     <DrawerModel :for-data="formData"
@@ -116,7 +122,7 @@
           <!-- @on-change="formData.user_birthday=$event" -->
 
           <el-form-item label="用户密码"
-                        prop="userPwd">
+                       >
             <el-input v-model="formData.userPwd"></el-input>
           </el-form-item>
           </el-form-item>

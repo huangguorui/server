@@ -74,7 +74,9 @@
                          label="所属人"></el-table-column>
 
         </el-table-column>
-
+        <el-table-column prop="affiliatedShop"
+                         label="所属店铺"></el-table-column>
+        </el-table-column>
         <el-table-column prop="estimatePay"
                          label="业绩"></el-table-column>
 

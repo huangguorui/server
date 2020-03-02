@@ -73,7 +73,6 @@
                          align="center"></el-table-column>
         <el-table-column prop="shopkeeperWangWang"
                          label="掌柜旺旺名"></el-table-column>
-
         </el-table-column>
 
         <el-table-column prop="userName"
@@ -83,15 +82,7 @@
                          label="店铺联系人"></el-table-column>
         <el-table-column prop="shopLink"
                          label="商品链接"></el-table-column>
-        <el-table-column prop="couponLink"
-                         label="优惠券链接"></el-table-column>
-        <el-table-column prop="couponStartTime"
-                         width="150"
-                         label="优惠券开始时间"></el-table-column>
 
-        <el-table-column prop="couponEndTime"
-                         width="150"
-                         label="优惠券结束时间"></el-table-column>
         <el-table-column prop="activityStartTime"
                          width="150"
                          label="活动开始时间"></el-table-column>
@@ -112,6 +103,16 @@
                          label="活动链接"></el-table-column>
         <el-table-column prop="remarks"
                          label="备注"></el-table-column>
+        <el-table-column prop="couponLink"
+                         label="优惠券链接"></el-table-column>
+        <el-table-column prop="couponStartTime"
+                         width="150"
+                         label="优惠券开始时间"></el-table-column>
+
+        <el-table-column prop="couponEndTime"
+                         width="150"
+                         label="优惠券结束时间"></el-table-column>
+
         <el-table-column label="操作"
                          width="150">
           <template slot-scope="scope">
@@ -126,7 +127,15 @@
       </el-table>
 
       <!-- 分页 -->
-      <pagination :page-info="query"></pagination>
+      <!-- <pagination :page-info="query"></pagination> -->
+      <div class="pagination">
+        <el-pagination background
+                       layout="total, prev, pager, next"
+                       :current-page="query.page"
+                       :page-size="query.page_size"
+                       :total="query.count"
+                       @current-change="handlePageChange"></el-pagination>
+      </div>
 
     </div>
     <!-- <DrawerModel :for-data="formData"
