@@ -76,9 +76,12 @@ export default {
       //时间格式化
       if (this.searchForm.userRegTime)
         this.searchForm.userRegTime = this.dataFormat2(this.searchForm.userRegTime) //用户注册时间
+        
       if (this.searchForm.searchOrderStartTime)
+
         this.searchForm.searchOrderStartTime = this.dataFormat2(this.searchForm.searchOrderStartTime) //订单开始时间
       if (this.searchForm.searchOrderEndTime)
+
         this.searchForm.searchOrderEndTime = this.dataFormat2(this.searchForm.searchOrderEndTime) //订单结束时间
 
       let data = Object.assign(this.query, this.searchForm)

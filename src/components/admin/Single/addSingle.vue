@@ -99,11 +99,32 @@
                                     style="width: 100%;" />
                   </el-col>
                 </el-form-item> -->
-                <el-form-item label="优惠券时间"
+
+                <el-form-item label="优惠券时间">
+                  <el-col :span="11">
+                    <el-form-item>
+                      <el-date-picker v-model="ruleForm.couponStartTime"
+                                      type="date"
+                                      placeholder="开始时间"
+                                      style="width: 100%;" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2"
+                          class="line">-</el-col>
+                  <el-col :span="11">
+                    <el-form-item>
+                      <el-date-picker v-model="ruleForm.couponEndTime"
+                                      type="date"
+                                      placeholder="结束时间"
+                                      style="width: 100%;" />
+                    </el-form-item>
+                  </el-col>
+                </el-form-item>
+
+                <!-- <el-form-item label="优惠券时间"
                               prop="couponTime">
-                  <!-- 时间注意识别 -->
                   <el-date-picker v-model="ruleForm.couponTime"
-                                  @input="defaultTime"
+                                  @input="change"
                                   @on-change="ruleForm.couponTime=$event"
                                   style="width:100%"
                                   type="daterange"
@@ -111,35 +132,43 @@
                                   start-placeholder="开始日期"
                                   end-placeholder="结束日期">
                   </el-date-picker>
-                </el-form-item>
-                <el-form-item label="活动时间"
+                </el-form-item> -->
+
+                <!-- <el-form-item label="活动时间"
                               prop="activityTime">
                   <el-date-picker v-model="ruleForm.activityTime"
                                   style="width:100%"
                                   type="daterange"
-                                  @input="defaultTime"
+                                  @input="change"
                                   @on-change="ruleForm.activityTime=$event"
                                   range-separator="至"
                                   start-placeholder="开始日期"
                                   end-placeholder="结束日期">
                   </el-date-picker>
-                </el-form-item>
-                <!-- <el-form-item label="活动时间">
+                </el-form-item> -->
+                <!-- @on-change="ruleForm.activityStartTime=$event" -->
+
+                <el-form-item label="活动时间">
                   <el-col :span="11">
-                    <el-date-picker v-model="form.date1"
-                                    type="date"
-                                    placeholder="开始时间"
-                                    style="width: 100%;" />
+                    <el-form-item>
+                      <el-date-picker v-model="ruleForm.activityStartTime"
+                                      type="date"
+                                      placeholder="开始时间"
+                                      style="width: 100%;" />
+                    </el-form-item>
                   </el-col>
                   <el-col :span="2"
                           class="line">-</el-col>
                   <el-col :span="11">
-                    <el-time-picker v-model="form.date2"
-                                    type="fixed-time"
-                                    placeholder="结束时间"
-                                    style="width: 100%;" />
+                    <el-form-item>
+                      <el-date-picker v-model="ruleForm.activityEndTime"
+                                      type="date"
+                                      placeholder="结束时间"
+                                      style="width: 100%;" />
+                    </el-form-item>
                   </el-col>
-                </el-form-item> -->
+                </el-form-item>
+
                 <el-form-item label="佣金+服务费%"
                               prop="commission">
                   <el-input v-model="ruleForm.commission" />
@@ -225,21 +254,10 @@ export default {
   },
 
   methods: {
+
+    change (value) {
+    },
     defaultTime () {
-
-
-      if (this.ruleForm.couponTime == null) {
-        this.ruleForm.couponStartTime = ''
-        this.ruleForm.couponEndTime = ''
-        this.ruleForm.couponTime = ['', '']
-      }
-      if (this.ruleForm.activityTime == null) {
-        this.ruleForm.activityStartTime = ''
-        this.ruleForm.activityEndTime = ''
-        this.ruleForm.activityTime = ['', '']
-      }
-      console.log(this.ruleForm.couponTime)
-
     },
     getDate () {
 
@@ -254,20 +272,10 @@ export default {
         getDocumentarysList({ id: this.$route.query.id }).then(res => {
           console.log(res)
           this.ruleForm = res.list[0]
-
-          this.ruleForm.couponTime = [this.ruleForm.couponStartTime, this.ruleForm.couponEndTime]
-          this.ruleForm.activityTime = [this.ruleForm.activityStartTime, this.ruleForm.activityEndTime]
-
-          if (this.ruleForm.couponTime != '' && this.ruleForm.couponTime != null) {
-
-            this.ruleForm.couponStartTime = this.formatDate(this.ruleForm.couponTime[0])
-            this.ruleForm.couponEndTime = this.formatDate(this.ruleForm.couponTime[1])
+          if (this.ruleForm.couponStartTime) {
+            this.ruleForm.couponTime = [this.ruleForm.couponStartTime, this.ruleForm.couponEndTime]
           }
-          if (this.ruleForm.activityTime != '' && this.ruleForm.couponTime != null) {
 
-            this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityTime[0])
-            this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityTime[1])
-          }
 
 
           // this.active.success()
@@ -290,35 +298,35 @@ export default {
     submitForm (formName) {
 
 
-      console.log(this.ruleForm)
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm.couponTime)
-          if (this.ruleForm.couponTime != '' && this.ruleForm.couponTime != null) {
-            this.ruleForm.couponStartTime = this.ruleForm.couponTime[0]
-            this.ruleForm.couponEndTime = this.ruleForm.couponTime[1]
+
+          // 1970-1-1
+
+          if (this.ruleForm.couponStartTime != '') {
+            this.ruleForm.couponStartTime = this.formatDate(this.ruleForm.couponStartTime)
+            this.ruleForm.couponEndTime = this.formatDate(this.ruleForm.couponEndTime)
+          }
+          if (this.ruleForm.activityStartTime != '') {
+            this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityStartTime)
+            this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityEndTime)
+          }
+
+          if ('1970-1-1' == this.ruleForm.couponStartTime) {
+            this.ruleForm.couponStartTime = ''
+          }
+          if ('1970-1-1' == this.ruleForm.couponEndTime) {
+            this.ruleForm.couponEndTime = ''
+          }
+          if ('1970-1-1' == this.ruleForm.activityStartTime) {
+            this.ruleForm.activityStartTime = ''
+          }
+          if ('1970-1-1' == this.ruleForm.activityEndTime) {
+            this.ruleForm.activityEndTime = ''
           }
 
 
-          // alert('submit!');
-          //验证的数据中有两个数据要切换为四个数据
-
-          // if (this.ruleForm.couponTime == null) {
-          //   this.ruleForm.couponStartTime = ''
-          //   this.ruleForm.couponEndTime = ''
-          // }
-
-          console.log("this.ruleForm.couponTime=", this.ruleForm.couponTime)
-          if (this.ruleForm.couponTime != '' && this.ruleForm.couponTime != null) {
-            this.ruleForm.couponStartTime = this.formatDate(this.ruleForm.couponTime[0])
-            this.ruleForm.couponEndTime = this.formatDate(this.ruleForm.couponTime[1])
-          }
-          if (this.ruleForm.activityTime != '' && this.ruleForm.activityTime != null) {
-            this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityTime[0])
-            this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityTime[1])
-          }
-
-
+          console.log("this.ruleForm=", this.ruleForm)
 
 
           postDocumentarySave(this.ruleForm).then(res => {
@@ -339,7 +347,6 @@ export default {
 
           })
 
-          console.log('ruleForm', this.ruleForm)
 
         } else {
           console.log('error submit!!');

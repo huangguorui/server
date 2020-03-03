@@ -246,6 +246,8 @@ export default {
 
 
         persons.forEach((item, index) => {
+
+          if(item.掌柜旺旺!="已失效"){
           let row = {
             shopkeeperWangWang: item.掌柜旺旺,
             serviceCharge: item.服务费率,
@@ -257,6 +259,10 @@ export default {
             estimateMoney: item.预估结算服务费,
           }
           _this.tableData.push(row)
+
+          }
+
+          // for (let i = 0; i <= 100; i++)
           // console.log("_this.tableData=====", _this.tableData);
           //issueNumber = item.出单数量
           //estimatePay = item.预估付款

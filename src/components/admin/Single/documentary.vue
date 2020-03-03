@@ -68,20 +68,31 @@
                          width="55"
                          align="center"></el-table-column>
         <el-table-column prop="id"
+                         fixed
                          label="ID"
                          width="55"
                          align="center"></el-table-column>
-        <el-table-column prop="shopkeeperWangWang"
-                         label="掌柜旺旺名"></el-table-column>
-        </el-table-column>
 
         <el-table-column prop="userName"
-                         label="接单人姓名"></el-table-column>
+                         fixed
+                         label="接单人"></el-table-column>
+        <el-table-column prop="shopName"
+                         fixed
+                         label="店铺名称"></el-table-column>
+        <el-table-column prop="shopkeeperWangWang"
+                         label="掌柜旺旺"></el-table-column>
+        </el-table-column>
 
-        <el-table-column prop="orderPhone"
-                         label="店铺联系人"></el-table-column>
         <el-table-column prop="shopLink"
-                         label="商品链接"></el-table-column>
+                         label="商品链接">
+          <template slot-scope="scope"
+                    v-if="scope.row.shopLink">
+
+            <a :href="scope.row.shopLink"
+               target="_blank"
+               style="color: blue;font-size:12px;text-align:center;">查看活动</a>
+          </template>
+        </el-table-column>
 
         <el-table-column prop="activityStartTime"
                          width="150"
@@ -95,16 +106,41 @@
         <el-table-column prop="documentaryTime"
                          label="添加时间"></el-table-column>
 
-        <el-table-column prop="shopName"
-                         label="店铺名称"></el-table-column>
         <el-table-column prop="activityID"
                          label="活动ID"></el-table-column>
+
         <el-table-column prop="activityLink"
                          label="活动链接"></el-table-column>
+
+        <!-- <el-table-column prop="activityLink"
+                         label="活动链接"
+                         width="300">
+          <template slot-scope="scope"
+                    v-if="scope.row.activityLink">
+            <div>
+              <a href="##"
+                 v-if="!scope.row.isShow"
+                 @click="isHidden(scope.$index,scope.row)"
+                 style="color: blue;font-size:12px;text-align:center;">查看链接</a>
+              {{scope.row.isShow==true?scope.row.activityLink:''}}
+
+            </div>
+          </template>
+        </el-table-column> -->
         <el-table-column prop="remarks"
                          label="备注"></el-table-column>
+        <el-table-column prop="orderPhone"
+                         label="店铺联系人"></el-table-column>
         <el-table-column prop="couponLink"
-                         label="优惠券链接"></el-table-column>
+                         label="券链接">
+          <template slot-scope="scope"
+                    v-if="scope.row.couponLink">
+            <a :href="scope.row.couponLink"
+               target="_blank"
+               style="color: blue;font-size:12px;text-align:center;">查看链接</a>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="couponStartTime"
                          width="150"
                          label="优惠券开始时间"></el-table-column>
@@ -264,7 +300,20 @@ export default {
 
   },
   methods: {
+    isHidden (i, row) {
+      //点击显示链接
+      row.isShow = true
+      this.$set(this.tableData, i, row)
 
+      // this.tableData[i].isShow = true;
+      // this.tableData.forEach((item, index) => {
+      //   if (item.id == e.id) {
+      //     this.tableData[index].isShow = true;
+      //     console.log(this.tableData[index].isShow)
+
+      //   }
+      // })
+    },
 
 
     add () {
@@ -311,6 +360,13 @@ export default {
       this.loading = true
       getDocumentarysList(this.query).then(res => {
         this.tableData = res.list;
+        this.tableData.forEach((item, index) => {
+          this.tableData[index].isShow = false
+
+        })
+
+        console.log(this.tableData)
+
         this.query = res.page_info
         this.loading = false
 
