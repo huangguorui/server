@@ -17,14 +17,15 @@
                    @click="delAllSelection">批量删除</el-button>
 
         <el-input v-model="searchForm.shopkeeperWangWang"
-                  clearable
                   @input="handleSearch"
+                  clearable
                   size="mini"
                   placeholder="掌柜旺旺名"
                   style="width:150px"
                   class="handle-input mr10"></el-input>
 
         <el-select v-model="searchForm.userName"
+                   clearable
                    placeholder="接单人"
                    class="mr10"
                    @input="handleSearch"
@@ -39,6 +40,7 @@
         <el-select v-model="searchForm.commission"
                    placeholder="佣金比例"
                    class="mr10"
+                   clearable
                    @input="handleSearch"
                    style="width:150px"
                    size="mini">
@@ -108,14 +110,11 @@
 
         <el-table-column prop="activityID"
                          label="活动ID"></el-table-column>
-
         <el-table-column prop="activityLink"
-                         label="活动链接"></el-table-column>
-
-        <!-- <el-table-column prop="activityLink"
                          label="活动链接"
                          width="300">
           <template slot-scope="scope"
+                    prop="activityLink"
                     v-if="scope.row.activityLink">
             <div>
               <a href="##"
@@ -126,7 +125,7 @@
 
             </div>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column prop="remarks"
                          label="备注"></el-table-column>
         <el-table-column prop="orderPhone"

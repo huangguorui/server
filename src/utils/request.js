@@ -63,7 +63,7 @@ service.interceptors.response.use(
         }
     },
     error => {
-        Message.error('网络错误');
+        Message.error('操作失败');
         console.log(error);
         Message.error(response.data.msg);
 

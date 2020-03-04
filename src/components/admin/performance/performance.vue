@@ -34,20 +34,25 @@
                         placeholder="结束时间">
         </el-date-picker>
 
-        <el-input v-model="searchForm.shopkeeperWangWang"
+        <el-input v-model="searchForm.affiliatedShop"
                   clearable
                   @input="handleSearch"
                   size="mini"
-                  placeholder="旺旺/活动ID"
+                  placeholder="所属店铺"
                   style="width:150px"
                   class="handle-input mr10"></el-input>
-        <el-input v-model.trim="searchForm.userName"
-                  clearable
-                  @input="handleSearch"
-                  size="mini"
-                  placeholder="所属人"
-                  style="width:150px"
-                  class="handle-input mr10"></el-input>
+
+        <el-select v-model="searchForm.userName"
+                   size="mini"
+                   clearable
+                   style="width:150px"
+                   class="handle-input mr10"
+                   @input="handleSearch"
+                   placeholder="所属人">
+          <el-option :label="item.userName"
+                     v-for="item in userList"
+                     :value="item.userName"></el-option>
+        </el-select>
 
         <el-button type="primary"
                    icon="el-icon-search"
@@ -58,6 +63,8 @@
       <el-table :data="tableData"
                 v-loading="loading"
                 border
+                :summary-method="getSummaries"
+                show-summary
                 class="table"
                 size="small"
                 ref="multipleTable"
@@ -121,11 +128,15 @@
 import interList from '@/common/mixins/list'
 import set from '@/common/mixins/set'
 
-import { getUserOrderList } from '../../../api/index';
+import { getUserOrderList, UserList } from '../../../api/index';
 export default {
   name: 'performance',
   data () {
     return {
+      totalNumBerAndMoney: {
+        sumMoney: '',
+        sumNumber: '',
+      },
       formData: {
         userPhone: '',//用户电话
         userName: '',//用户真实姓名
@@ -135,6 +146,7 @@ export default {
       isShowDrawer: false,
       tableData: [], //当前表数据
       editVisible: false, //弹框删除
+      userList: [],
     };
   },
   mixins: [interList],
@@ -142,11 +154,61 @@ export default {
     this.getData();
   },
   methods: {
+    getSummaries (param) {
+      console.log('a=', 1)
+      console.log("param=", param)
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+
+        if (index === 0) {
+          sums[index] = '总计';
+          return;
+        }
+        if (index === 3) {
+          sums[index] = this.totalNumBerAndMoney.sumNumber
+        }
+        if (index === 4) {
+          sums[index] = this.totalNumBerAndMoney.sumMoney
+        }
+        // const values = data.map(item => Number(item[column.property]));
+        // if (!values.every(value => isNaN(value))) {
+        //   sums[index] = values.reduce((prev, curr) => {
+        //     const value = Number(curr);
+        //     if (!isNaN(value)) {
+        //       return prev + curr;
+        //     } else {
+        //       return prev;
+        //     }
+        //   }, 0);
+        //   sums[index] += ' 元';
+        // } else {
+        //   sums[index] = 'N/A';
+        // }
+      });
+
+
+      return sums;
+    },
     getData () {
+
+
+      UserList({ page_size: 200 }).then(res => {
+        console.log(res)
+        this.userList = res.list;
+      }).catch(function (error) {
+        this.active.error()
+
+      })
+
+
       let _this = this
       this.loading = true
       getUserOrderList(this.query).then(res => {
         this.tableData = res.list;
+
+        this.totalNumBerAndMoney = res.totalNumBerAndMoney
+
         this.query = res.page_info
         this.loading = false
 

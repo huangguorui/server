@@ -112,6 +112,15 @@ export const getExcelExport = query => {
 
 
 
+//用户登录
+export const getAdminLogin = query => {
+    return request({
+        url: '/user/admin-login',
+        method: 'get',
+        params: query
+    });
+};
+
 
 
 //excel导入
