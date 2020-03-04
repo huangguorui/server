@@ -42,7 +42,7 @@
                 <el-form-item label="用户姓名"
                               prop="userID">
                   <el-select v-model="ruleForm.userID"
-                             placeholder="请选择活动区域">
+                             placeholder="请选择用户姓名">
                     <el-option :label="item.userName"
                                v-for="item in userList"
                                :value="item.id"></el-option>

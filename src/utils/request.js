@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import router from '@/router';
 import {
     Message
 } from 'element-ui';
@@ -49,6 +49,13 @@ service.interceptors.response.use(
             if (response.data.code == 0) {
                 //失败
                 Message.error(response.data.msg);
+
+            }
+            if (response.data.code == 301) {
+                //失败
+                Message.error(response.data.msg);
+                localStorage.removeItem('ms_username');
+                router.push('/');
 
             }
             // //操作失败就需要提示一下了

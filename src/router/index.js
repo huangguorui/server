@@ -6,8 +6,8 @@ Vue.use(Router);
 export default new Router({
     routes: [{
             path: '/',
-            redirect: '/dashboard'
-        },
+            redirect: '/performance'
+        }, //dashboard
         {
             path: '/',
             component: () => import( /* webpackChunkName: "home" */ '../components/common/Home.vue'),
@@ -100,20 +100,12 @@ export default new Router({
             ]
         },
         {
-            path: '/admin',
-            component: () => import( /* webpackChunkName: "login" */ '../components/page/Admin.vue'),
-            meta: {
-                title: '管理员登录'
-            }
-        },
-        {
             path: '/login',
             component: () => import( /* webpackChunkName: "login" */ '../components/page/Login.vue'),
             meta: {
                 title: '登录'
             }
         },
-
         {
             path: '*',
             redirect: '/404'

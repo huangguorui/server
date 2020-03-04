@@ -2,32 +2,45 @@
   <div class="login-wrap">
     <div class="ms-login">
       <div class="ms-title">后台管理系统</div>
+
       <el-form :model="param"
                :rules="rules"
                ref="login"
                label-width="0px"
                class="ms-content">
-        <el-form-item prop="username">
-          <el-input v-model="param.username"
-                    placeholder="username">
+        <el-form-item prop="userPhone">
+          <el-input v-model="param.userPhone"
+                    clearable
+                    placeholder="请输入电话号码">
             <el-button slot="prepend"
                        icon="el-icon-lx-people"></el-button>
           </el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input type="password"
-                    placeholder="password"
-                    v-model="param.password"
+        <el-form-item prop="userPwd">
+          <el-input type="userPwd"
+                    placeholder="请输入密码"
+                    clearable
+                    v-model="param.userPwd"
+                    show-password
                     @keyup.enter.native="submitForm()">
             <el-button slot="prepend"
                        icon="el-icon-lx-lock"></el-button>
           </el-input>
         </el-form-item>
+
+        <el-form-item label=""
+                      prop="isUser">
+          <el-radio-group v-model="param.isUser">
+            <el-radio label="用户登录"></el-radio>
+            <el-radio label="管理员登录"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <div class="login-btn">
           <el-button type="primary"
                      @click="submitForm()">登录</el-button>
         </div>
-        <p class="login-tips">Tips : 用户名和密码随便填。123</p>
+        <!-- <p class="login-tips">Tips : 用户名和密码随便填。123</p> -->
       </el-form>
     </div>
   </div>
@@ -36,46 +49,80 @@
 <script>
 import { getAdminLogin, UserList } from './../../api/index';
 
+
+import { adminRouters, userRouters } from "./../../utils/route"
+import { adminSliderRouters, userSliderRouters } from "./../../utils/slide"
+
+console.log(userRouters)
+// console.log(routers)
 export default {
   data: function () {
     return {
       param: {
-        username: 'admin',
-        password: '123123',
+        userPhone: '12345678999',
+        userPwd: '123456',
+        isUser: "用户登录",
       },
       rules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        userPhone: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        userPwd: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        isUser: [
+          { required: true, message: '请选择活动资源', trigger: 'change' }
+        ],
       },
     };
   },
   methods: {
+    //管理员登录
+    isAdmin () {
+      getAdminLogin(this.param).then(res => {
+        if (res) {
+          localStorage.setItem('ms_username', this.param.userPhone);
+          localStorage.setItem('token', res.token);
+          //添加相对于的路由
+          localStorage.setItem('isRouters', JSON.stringify(adminRouters));
+          // console.log(JSON.parse(localStorage.getItem('isRouters')))
+          // this.$router.addRoutes(userRouters);
+          localStorage.setItem('isSlider', JSON.stringify(adminSliderRouters));
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          });
+          // 
+          this.$router.push('/');
+
+        }
+
+      })
+    },
+    //普通用户登录
+    isUser () {
+
+      this.$message({
+        message: '暂不可用',
+        type: 'error'
+      });
+
+
+    },
+
     submitForm () {
 
-      getAdminLogin({ userName: this.username, userPwd: this.password }).then(res => {
-        console.log(res)
-        localStorage.setItem('ms_username', this.param.username);
-        localStorage.setItem('token', res.token);
-        this.$router.push('/');
-
-      }).catch(function (error) {
-        this.active.error()
-      })
-
-      // this.$refs.login.validate(valid => {
+      this.$refs.login.validate(valid => {
 
 
-      //   if (valid) {
-      //     this.$message.success('登录成功');
-      //     localStorage.setItem('ms_username', this.param.username);
+        if (valid) {
+          // this.$message.success('登录成功');
+          // localStorage.setItem('ms_userPhone', this.param.userPhone);
+          if (this.param.isUser == "用户登录") this.isUser()
+          if (this.param.isUser == "管理员登录") this.isAdmin()
 
-      //     this.$router.push('/');
-      //   } else {
-      //     this.$message.error('请输入账号和密码');
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
+        } else {
+          this.$message.error('请输入账号和密码');
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
   },
 };
