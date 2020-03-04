@@ -35,6 +35,11 @@ const i18n = new VueI18n({
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} `;
     const role = localStorage.getItem('ms_username');
+    console.log("to.path=", to.path)
+    if (!role && to.path == "/admin") {
+        next('/admin');
+    }
+
     if (!role && to.path !== '/login') {
         next('/login');
     } else if (to.meta.permission) {

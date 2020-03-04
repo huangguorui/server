@@ -8,22 +8,13 @@
       </el-breadcrumb>
     </div>
     <div class="container">
-      <div class="handle-box">
-        <el-button type="primary"
-                   icon="el-icon-delete"
-                   class="handle-del mr10"
-                   size="mini"
-                   :disabled="isBtnDisable"
-                   @click="delAllSelection">批量删除</el-button>
-
-        <el-input v-model="searchForm.shopkeeperWangWang"
+       <el-input v-model="searchForm.shopName"
                   @input="handleSearch"
                   clearable
                   size="mini"
-                  placeholder="掌柜旺旺名"
+                  placeholder="店铺名称"
                   style="width:150px"
                   class="handle-input mr10"></el-input>
-
         <el-select v-model="searchForm.userName"
                    clearable
                    placeholder="接单人"
@@ -37,6 +28,37 @@
                      :value="item.userName"></el-option>
         </el-select>
 
+        <el-date-picker v-model="searchForm.activityEndTime"
+                        type="date"
+                        @input="handleSearch"
+                        size="mini"
+                        clearable
+                        @on-change="searchForm.activityEndTime=$event"
+                        style="width:150px"
+                        class="mr10"
+                        format="yyyy-MM-dd"
+                        placeholder="活动结束时间">
+        </el-date-picker>
+        <el-date-picker v-model="searchForm.couponEndTime"
+                        type="date"
+                        @input="handleSearch"
+                        size="mini"
+                        clearable
+                        @on-change="searchForm.couponEndTime=$event"
+                        style="width:150px"
+                        class="mr10"
+                        format="yyyy-MM-dd"
+                        placeholder="券结束时间">
+        </el-date-picker>
+
+        <el-input v-model="searchForm.activityID"
+                  @input="handleSearch"
+                  clearable
+                  size="mini"
+                  placeholder="活动ID"
+                  style="width:150px"
+                  class="handle-input mr10"></el-input>
+
         <el-select v-model="searchForm.commission"
                    placeholder="佣金比例"
                    class="mr10"
@@ -49,14 +71,23 @@
                      :keys="item.id"
                      :value="item.text">>={{item.text}}</el-option>
         </el-select>
+        <!-- <el-table-column prop="couponEndTime"
+                         width="150"
+                         label="优惠券结束时间"></el-table-column> -->
 
         <el-button type="primary"
                    icon="el-icon-search"
                    size="mini"
                    @click="handleSearch">搜索</el-button>
+      <div class="handle-box">
         <el-button type="primary"
+                   icon="el-icon-delete"
+                   class="handle-del mr10"
                    size="mini"
-                   @click="add">添加用户</el-button>
+                   :disabled="isBtnDisable"
+                   @click="delAllSelection">批量删除</el-button>
+
+       
       </div>
       <el-table :data="tableData"
                 v-loading="loading"
@@ -315,10 +346,7 @@ export default {
     },
 
 
-    add () {
-      this.formData = {}
-      this.isShowDrawer = true
-    },
+
 
     edlt (row) {
       console.log(row)

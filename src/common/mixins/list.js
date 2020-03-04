@@ -74,9 +74,17 @@ export default {
     // 触发搜索按钮
     handleSearch() {
       //时间格式化
+
+      if (this.searchForm.couponEndTime)
+        this.searchForm.couponEndTime = this.dataFormat2(this.searchForm.couponEndTime) //优惠券过期时间
+      if (this.searchForm.activityEndTime)
+      
+        this.searchForm.activityEndTime = this.dataFormat2(this.searchForm.activityEndTime) //活动结束时间
+
+
       if (this.searchForm.userRegTime)
         this.searchForm.userRegTime = this.dataFormat2(this.searchForm.userRegTime) //用户注册时间
-        
+
       if (this.searchForm.searchOrderStartTime)
 
         this.searchForm.searchOrderStartTime = this.dataFormat2(this.searchForm.searchOrderStartTime) //订单开始时间

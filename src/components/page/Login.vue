@@ -52,26 +52,30 @@ export default {
   methods: {
     submitForm () {
 
-      //   getAdminLogin({ a: 1 }).then(res => {
+      getAdminLogin({ userName: this.username, userPwd: this.password }).then(res => {
+        console.log(res)
+        localStorage.setItem('ms_username', this.param.username);
+        localStorage.setItem('token', res.token);
+        this.$router.push('/');
 
-      //   }).catch(function (error) {
-      //     this.active.error()
-      //   })
+      }).catch(function (error) {
+        this.active.error()
+      })
 
-      this.$refs.login.validate(valid => {
+      // this.$refs.login.validate(valid => {
 
 
-        if (valid) {
-          this.$message.success('登录成功');
-          localStorage.setItem('ms_username', this.param.username);
+      //   if (valid) {
+      //     this.$message.success('登录成功');
+      //     localStorage.setItem('ms_username', this.param.username);
 
-          this.$router.push('/');
-        } else {
-          this.$message.error('请输入账号和密码');
-          console.log('error submit!!');
-          return false;
-        }
-      });
+      //     this.$router.push('/');
+      //   } else {
+      //     this.$message.error('请输入账号和密码');
+      //     console.log('error submit!!');
+      //     return false;
+      //   }
+      // });
     },
   },
 };
