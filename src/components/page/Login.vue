@@ -53,7 +53,6 @@ import { getAdminLogin, UserList } from './../../api/index';
 import { adminRouters, userRouters } from "./../../utils/route"
 import { adminSliderRouters, userSliderRouters } from "./../../utils/slide"
 
-console.log(userRouters)
 // console.log(routers)
 export default {
   data: function () {
@@ -80,9 +79,9 @@ export default {
           localStorage.setItem('ms_username', this.param.userPhone);
           localStorage.setItem('token', res.token);
           //添加相对于的路由
-          localStorage.setItem('isRouters', JSON.stringify(adminRouters));
-          // console.log(JSON.parse(localStorage.getItem('isRouters')))
-          // this.$router.addRoutes(userRouters);
+          localStorage.setItem('isRouters', "admin");
+          this.$router.addRoutes(adminRouters);
+
           localStorage.setItem('isSlider', JSON.stringify(adminSliderRouters));
           this.$message({
             message: '登录成功',
@@ -98,10 +97,31 @@ export default {
     //普通用户登录
     isUser () {
 
-      this.$message({
-        message: '暂不可用',
-        type: 'error'
-      });
+      getAdminLogin(this.param).then(res => {
+        if (res) {
+          localStorage.setItem('ms_username', this.param.userPhone);
+          localStorage.setItem('token', res.token);
+          //添加相对于的路由
+
+          localStorage.setItem('isRouters', "user");
+          this.$router.addRoutes(userRouters);
+
+          localStorage.setItem('isSlider', JSON.stringify(userSliderRouters));
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          });
+          // 
+          this.$router.push('/');
+
+        }
+
+      })
+
+      // this.$message({
+      //   message: '暂不可用',
+      //   type: 'error'
+      // });
 
 
     },

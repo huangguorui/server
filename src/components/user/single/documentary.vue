@@ -207,9 +207,8 @@
 import interList from '@/common/mixins/list'
 import set from '@/common/mixins/set'
 
-import { UserSave, postDocumentaryDel, getDocumentarysList, UserList } from '../../../api/index';
+import { UserSave, postDocumentaryDel, getUserDocumentarysList, UserList } from '../../../api/index';
 export default {
-  name: 'getDocumentarysList',
   data () {
     return {
       formData: {
@@ -280,13 +279,12 @@ export default {
   },
   mixins: [interList],
   created () {
+    UserList({ page_size: 100 }).then(res => {
+      this.userList = res.list;
 
-    // UserList({ page_size: 100 }).then(res => {
-    //   this.userList = res.list;
-
-    // }).catch(function (error) {
-    //   this.active.error()
-    // })
+    }).catch(function (error) {
+      this.active.error()
+    })
 
   },
   methods: {
@@ -333,7 +331,7 @@ export default {
     getData () {
       let _this = this
       this.loading = true
-      getDocumentarysList(this.query).then(res => {
+      getUserDocumentarysList(this.query).then(res => {
         this.tableData = res.list;
         this.tableData.forEach((item, index) => {
           this.tableData[index].isShow = false

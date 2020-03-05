@@ -156,7 +156,6 @@ import { UserList, getDocumentarysList, postDocumentarySave } from '../../../api
 export default {
   data () {
     return {
-      documentaryID: -1,
       ruleForm: {
         id: '',
         shopkeeperWangWang: "", //根据掌柜旺旺  1
@@ -189,12 +188,25 @@ export default {
     };
   },
   created () {
+    //没有ID跳转到列表页面
+    if (!this.$route.query.id) {
+      this.$router.push({  //核心语句
+        path: '/documentary',   //跳转的路径
+        query: {           //路由传参时push和query搭配使用 ，作用时传递参数
+        }
+      })
+    }
     this.getUser()
   },
 
   methods: {
 
+    change (value) {
+    },
+    defaultTime () {
+    },
     getUser () {
+
       UserList({ page_size: 200 }).then(res => {
         console.log(res)
         this.userList = res.list;
@@ -202,6 +214,19 @@ export default {
         this.active.error()
 
       })
+      // 判断是否有id信息，有的话就要浮现数据
+
+      if (this.$route.query.id) {
+        getDocumentarysList({ id: this.$route.query.id }).then(res => {
+          console.log(res)
+          this.ruleForm = res.list[0]
+          if (this.ruleForm.couponStartTime) {
+            this.ruleForm.couponTime = [this.ruleForm.couponStartTime, this.ruleForm.couponEndTime]
+          }
+        })
+      } else {
+        this.ruleForm = {}
+      }
     },
     submitForm (formName) {
 

@@ -46,6 +46,7 @@
 <script>
 import bus from '../common/bus';
 import slideRouters from "../../utils/slide"
+import { adminRouters, userRouters } from "../../utils/route"
 export default {
   data () {
     return {
@@ -66,11 +67,17 @@ export default {
   },
   created () {
     this.items = JSON.parse(localStorage.getItem('isSlider'))
-    console.log(JSON.parse(localStorage.getItem('isSlider')))
-
+    let isRouter = localStorage.getItem('isRouters')
     //router添加
+    if (isRouter == "admin") {
+      this.$router.addRoutes(adminRouters);
+    } else
+      if (isRouter == "user") {
+        this.$router.addRoutes(userRouters);
 
-
+      } else {
+        console.log('未登录')
+      }
 
     // JSON.parse(localStorage.getItem('isSlider'))
 

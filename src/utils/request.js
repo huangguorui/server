@@ -9,7 +9,7 @@ const service = axios.create({
 
     //   baseURL: 'http://api.huanggr.cn/adminapi/',
     //baseURL: 'http://system.huanggr.cn/adminapi/',
-    baseURL: 'http://www.student.com/adminapi/',
+    baseURL: 'http://www.student.com/',
 
     timeout: 5000,
     // headers: { 'Content-type': 'application/json; charset=utf-8' },
