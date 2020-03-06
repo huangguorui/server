@@ -57,7 +57,7 @@ export const postDocumentaryDel = query => {
 
 
 
-//业绩概括列表
+//管理员视角业绩概括列表
 export const getUserOrderList = query => {
     return request({
         url: '/adminapi/userorder/user-order-list',
@@ -151,11 +151,6 @@ export const getAdminLoginOut = query => {
         params: query
     });
 };
-getAdminLoginOut
-
-
-
-
 
 //下面为用户接口
 
@@ -172,6 +167,14 @@ export const postUserDocumentarySave = query => {
     return request({
         url: '/api/documentary/documentary-save',
         method: 'post',
+        params: query
+    });
+};
+//用户视角
+export const getUserUserOrderList = query => {
+    return request({
+        url: '/api/userorder/user-order-list',
+        method: 'get',
         params: query
     });
 };

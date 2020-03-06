@@ -15,18 +15,6 @@
                 placeholder="店铺名称"
                 style="width:150px"
                 class="handle-input mr10"></el-input>
-      <el-select v-model="searchForm.userName"
-                 clearable
-                 placeholder="接单人"
-                 class="mr10"
-                 @input="handleSearch"
-                 style="width:150px"
-                 size="mini">
-        <el-option :label="item.userName"
-                   v-for="item in userList"
-                   :keys="item.id"
-                   :value="item.userName"></el-option>
-      </el-select>
 
       <el-date-picker v-model="searchForm.activityEndTime"
                       type="date"
@@ -102,9 +90,6 @@
                          width="55"
                          align="center"></el-table-column>
 
-        <el-table-column prop="userName"
-                         fixed
-                         label="接单人"></el-table-column>
         <el-table-column prop="shopName"
                          fixed
                          label="店铺名称"></el-table-column>
@@ -207,34 +192,10 @@
 import interList from '@/common/mixins/list'
 import set from '@/common/mixins/set'
 
-import { UserSave, postDocumentaryDel, getUserDocumentarysList, UserList } from '../../../api/index';
+import { UserSave, postDocumentaryDel, getUserDocumentarysList } from '../../../api/index';
 export default {
   data () {
     return {
-      formData: {
-        userPhone: '',//用户电话
-        userName: '',//用户真实姓名
-        userPwd: '',//用户密码
-      },
-      rules: {
-
-        userPhone: [
-          // { type: 'number', message: '手机号码必须为数字值' },
-          { required: true, message: '手机号码不能为空', trigger: 'blur' },
-
-          // { min: 1, max: 5, message: '长度在 5 到 11 个字符', trigger: 'blur' },
-        ],
-        userName: [
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }, ,
-          { required: true, message: '请输入用户真实姓名', trigger: 'blur' }
-        ],
-        userPwd: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' }, ,
-        ],
-      },
-      drawerTitle: '新增用户',
-      isShowDrawer: false,
       tableData: [
         {
           id: '',
@@ -255,7 +216,6 @@ export default {
           documentaryTime: "",  //订单生产时间，后台生成
         }
       ], //当前表数据
-      userList: [],  //用户列表
       commissionList: [
         {
           id: 0,
@@ -273,18 +233,12 @@ export default {
           id: 3,
           text: '>=30',
         },
-      ],  //佣金比例列表
-      editVisible: false, //弹框删除
+      ],
     };
   },
   mixins: [interList],
   created () {
-    UserList({ page_size: 100 }).then(res => {
-      this.userList = res.list;
 
-    }).catch(function (error) {
-      this.active.error()
-    })
 
   },
   methods: {
@@ -293,38 +247,14 @@ export default {
       row.isShow = true
       this.$set(this.tableData, i, row)
     },
-
     edlt (row) {
       console.log(row)
-      this.$router.push({  //核心语句
-        path: '/ueditSingle',   //跳转的路径
-        query: {           //路由传参时push和query搭配使用 ，作用时传递参数
+      this.$router.push({
+        path: '/ueditSingle',
+        query: {
           id: row.id,
         }
       })
-    },
-    applySubmit (data, formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          UserSave(data).then(res => {
-            //清空数据
-            this.$refs[formName].resetFields()
-            if (res) {
-              this.getData()
-            } else {
-              this.active.success()
-              this.getData()
-            }
-          })
-        } else {
-          return false;
-        }
-
-
-      });
-    },
-    closeDraw (data) {
-
     },
     getData () {
       let _this = this
@@ -335,9 +265,6 @@ export default {
           this.tableData[index].isShow = false
 
         })
-
-        console.log(this.tableData)
-
         this.query = res.page_info
         this.loading = false
 
@@ -348,7 +275,6 @@ export default {
     },
     //单选多选都可删除
     delAllSelection (id, flag) {
-      //通过点击删除进来的 传入的参数必须为一个数组
       if (flag == 'single') {
         this.DelId = [id]
         console.log('id', id)

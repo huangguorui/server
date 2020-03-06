@@ -179,9 +179,9 @@ export default {
   created () {
     //没有ID跳转到列表页面
     if (!this.$route.query.id) {
-      this.$router.push({  //核心语句
-        path: '/documentary',   //跳转的路径
-        query: {           //路由传参时push和query搭配使用 ，作用时传递参数
+      this.$router.push({
+        path: '/documentary',
+        query: {
         }
       })
     }
@@ -191,8 +191,6 @@ export default {
   methods: {
 
     getUser () {
-      // 判断是否有id信息，有的话就要浮现数据
-
       if (this.$route.query.id) {
         getUserDocumentarysList({ id: this.$route.query.id }).then(res => {
           console.log(res)
@@ -242,9 +240,9 @@ export default {
               this.active.success()
 
               if (this.$route.query.id) {
-                this.$router.push({  //核心语句
-                  path: '/documentary',   //跳转的路径
-                  query: {           //路由传参时push和query搭配使用 ，作用时传递参数
+                this.$router.push({
+                  path: '/udocumentary',
+                  query: {
                   }
                 })
               }
@@ -267,8 +265,11 @@ export default {
     //格式化时间
     formatDate (dataTime) {
       var d = new Date(dataTime);
-      let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      let youWant = d.getFullYear() + '-' + this.p(d.getMonth() + 1) + '-' + this.p(d.getDate());
       return youWant
+    },
+    p (s) {
+      return s < 10 ? '0' + s : s
     },
     //格式化时间
     // formatDate (dataTime) {

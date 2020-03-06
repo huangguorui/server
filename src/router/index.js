@@ -9,7 +9,7 @@ Router.prototype.push = function push(location) {
 export default new Router({
     routes: [{
             path: '/',
-            redirect: '/performance'
+            redirect: '/dashboard'
         }, //dashboard
         {
             path: '/',

@@ -21,7 +21,7 @@
           </el-tooltip>
         </div>
         <!-- 消息中心 -->
-        <div class="btn-bell">
+        <!-- <div class="btn-bell">
           <el-tooltip effect="dark"
                       :content="message?`有${message}条未读消息`:`消息中心`"
                       placement="bottom">
@@ -31,7 +31,7 @@
           </el-tooltip>
           <span class="btn-bell-badge"
                 v-if="message"></span>
-        </div>
+        </div> -->
         <!-- 用户头像 -->
         <div class="user-avator">
           <img src="../../assets/img/img.jpg" />
@@ -40,7 +40,6 @@
         <el-dropdown class="user-name"
                      trigger="click"
                      @command="handleCommand">
-          <el-button @click="loginOut">测试退出</el-button>
           <span class="el-dropdown-link">
             {{username}}
             <i class="el-icon-caret-bottom"></i>
@@ -78,30 +77,24 @@ export default {
   },
   methods: {
 
-    loginOut () {
-      //先用本地缓存做判断
-
-      let isRouter = localStorage.getItem('isRouters')
-
-
-      if (isRouter == "admin") {
-        getAdminLoginOut().then(res => {
-          this.active.success()
-        })
-      } else
-        if (isRouter == "user") {
-          getUserLoginOut().then(res => {
-            this.active.success()
-          })
-        } else {
-          console.log('未登录')
-        }
-
-    },
-
     // 用户名下拉菜单选择事件
     handleCommand (command) {
       if (command == 'loginout') {
+
+        let isRouter = localStorage.getItem('isRouters')
+
+        if (isRouter == "admin") {
+          getAdminLoginOut().then(res => {
+            this.active.success()
+          })
+        } else
+          if (isRouter == "user") {
+            getUserLoginOut().then(res => {
+              this.active.success()
+            })
+          }
+
+
         localStorage.removeItem('ms_username');
         this.$router.push('/login');
       }

@@ -241,7 +241,7 @@ export default {
 
               if (this.$route.query.id) {
                 this.$router.push({  //核心语句
-                  path: '/documentary',   //跳转的路径
+                  path: '/udocumentary',   //跳转的路径
                   query: {           //路由传参时push和query搭配使用 ，作用时传递参数
                   }
                 })
@@ -265,9 +265,13 @@ export default {
     //格式化时间
     formatDate (dataTime) {
       var d = new Date(dataTime);
-      let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      let youWant = d.getFullYear() + '-' + this.p(d.getMonth() + 1) + '-' + this.p(d.getDate());
       return youWant
     },
+    p (s) {
+      return s < 10 ? '0' + s : s
+    },
+
     //格式化时间
     // formatDate (dataTime) {
     //   var d = new Date(dataTime);

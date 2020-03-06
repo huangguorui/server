@@ -247,18 +247,18 @@ export default {
 
         persons.forEach((item, index) => {
 
-          if(item.掌柜旺旺!="已失效"){
-          let row = {
-            shopkeeperWangWang: item.掌柜旺旺,
-            serviceCharge: item.服务费率,
-            shopID: item.商品ID,
-            shopInfo: item.商品信息,
-            affiliatedShop: item.所属店铺,
-            issueNumber: item.商品数,
-            estimatePay: item.预估付款服务费,
-            estimateMoney: item.预估结算服务费,
-          }
-          _this.tableData.push(row)
+          if (item.订单状态 != "已失效") {
+            let row = {
+              shopkeeperWangWang: item.掌柜旺旺,
+              serviceCharge: item.服务费率,
+              shopID: item.商品ID,
+              shopInfo: item.商品信息,
+              affiliatedShop: item.所属店铺,
+              issueNumber: item.商品数,
+              estimatePay: item.预估付款服务费,
+              estimateMoney: item.预估结算服务费,
+            }
+            _this.tableData.push(row)
 
           }
 

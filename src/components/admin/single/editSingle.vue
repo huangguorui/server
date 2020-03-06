@@ -25,7 +25,6 @@
                               prop="shopkeeperWangWang">
                   <el-input v-model.trim="ruleForm.shopkeeperWangWang" />
                 </el-form-item>
-
                 <el-form-item label="用户姓名"
                               prop="userID">
                   <el-select v-model="ruleForm.userID"
@@ -201,10 +200,7 @@ export default {
 
   methods: {
 
-    change (value) {
-    },
-    defaultTime () {
-    },
+
     getUser () {
 
       UserList({ page_size: 200 }).then(res => {
@@ -217,6 +213,7 @@ export default {
       // 判断是否有id信息，有的话就要浮现数据
 
       if (this.$route.query.id) {
+
         getDocumentarysList({ id: this.$route.query.id }).then(res => {
           console.log(res)
           this.ruleForm = res.list[0]
@@ -255,9 +252,7 @@ export default {
             this.ruleForm.activityEndTime = ''
           }
 
-
           console.log("this.ruleForm=", this.ruleForm)
-
 
           postDocumentarySave(this.ruleForm).then(res => {
             if (res) {
@@ -290,8 +285,11 @@ export default {
     //格式化时间
     formatDate (dataTime) {
       var d = new Date(dataTime);
-      let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      let youWant = d.getFullYear() + '-' + this.p(d.getMonth() + 1) + '-' + this.p(d.getDate());
       return youWant
+    },
+    p (s) {
+      return s < 10 ? '0' + s : s
     },
     //格式化时间
     // formatDate (dataTime) {

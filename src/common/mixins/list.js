@@ -37,8 +37,8 @@ export default {
   },
   watch: {
     $route(to, from) {
-      // console.log(to.path);
-      // this.getData()
+      console.log(to.path);
+      this.getData()
 
     }
   },

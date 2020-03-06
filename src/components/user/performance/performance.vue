@@ -42,18 +42,6 @@
                   style="width:150px"
                   class="handle-input mr10"></el-input>
 
-        <el-select v-model="searchForm.userName"
-                   size="mini"
-                   clearable
-                   style="width:150px"
-                   class="handle-input mr10"
-                   @input="handleSearch"
-                   placeholder="所属人">
-          <el-option :label="item.userName"
-                     v-for="item in userList"
-                     :value="item.userName"></el-option>
-        </el-select>
-
         <el-button type="primary"
                    icon="el-icon-search"
                    size="mini"
@@ -130,7 +118,7 @@ import set from '@/common/mixins/set'
 
 
 
-import { getUserOrderList, UserList } from '../../../api/index';
+import { getUserUserOrderList } from '../../../api/index';
 export default {
   name: 'performance',
   data () {
@@ -148,7 +136,6 @@ export default {
       isShowDrawer: false,
       tableData: [], //当前表数据
       editVisible: false, //弹框删除
-      userList: [],
     };
   },
   mixins: [interList],
@@ -171,40 +158,15 @@ export default {
         if (index === 4) {
           sums[index] = this.totalNumBerAndMoney.sumMoney
         }
-        // const values = data.map(item => Number(item[column.property]));
-        // if (!values.every(value => isNaN(value))) {
-        //   sums[index] = values.reduce((prev, curr) => {
-        //     const value = Number(curr);
-        //     if (!isNaN(value)) {
-        //       return prev + curr;
-        //     } else {
-        //       return prev;
-        //     }
-        //   }, 0);
-        //   sums[index] += ' 元';
-        // } else {
-        //   sums[index] = 'N/A';
-        // }
       });
 
 
       return sums;
     },
     getData () {
-
-
-      UserList({ page_size: 200 }).then(res => {
-        console.log(res)
-        this.userList = res.list;
-      }).catch(function (error) {
-        this.active.error()
-
-      })
-
-
       let _this = this
       this.loading = true
-      getUserOrderList(this.query).then(res => {
+      getUserUserOrderList(this.query).then(res => {
         this.tableData = res.list;
 
         this.totalNumBerAndMoney = res.totalNumBerAndMoney

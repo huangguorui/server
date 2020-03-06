@@ -178,9 +178,6 @@ export default {
       }
     };
   },
-  created () {
-  },
-
   methods: {
 
     submitForm (formName) {
@@ -196,21 +193,6 @@ export default {
             this.ruleForm.activityStartTime = this.formatDate(this.ruleForm.activityStartTime)
             this.ruleForm.activityEndTime = this.formatDate(this.ruleForm.activityEndTime)
           }
-
-          if ('1970-1-1' == this.ruleForm.couponStartTime) {
-            this.ruleForm.couponStartTime = ''
-          }
-          if ('1970-1-1' == this.ruleForm.couponEndTime) {
-            this.ruleForm.couponEndTime = ''
-          }
-          if ('1970-1-1' == this.ruleForm.activityStartTime) {
-            this.ruleForm.activityStartTime = ''
-          }
-          if ('1970-1-1' == this.ruleForm.activityEndTime) {
-            this.ruleForm.activityEndTime = ''
-          }
-
-          console.log("this.ruleForm=", this.ruleForm)
 
           postUserDocumentarySave(this.ruleForm).then(res => {
             if (res) {
@@ -242,8 +224,11 @@ export default {
     //格式化时间
     formatDate (dataTime) {
       var d = new Date(dataTime);
-      let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      let youWant = d.getFullYear() + '-' + this.p(d.getMonth() + 1) + '-' + this.p(d.getDate());
       return youWant
+    },
+    p (s) {
+      return s < 10 ? '0' + s : s
     },
 
   }

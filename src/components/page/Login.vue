@@ -77,10 +77,7 @@ export default {
       getAdminLogin(this.param).then(res => {
         if (res) {
           localStorage.setItem('ms_username', this.param.userPhone);
-          //  localStorage.setItem('token', res.token);
-          //添加相对于的路由
           localStorage.setItem('isRouters', "admin");
-          // this.$router.addRoutes(adminRouters);
           localStorage.setItem('isSlider', JSON.stringify(adminSliderRouters));
           this.$message({
             message: '登录成功',
@@ -103,7 +100,9 @@ export default {
           //添加相对于的路由
 
           localStorage.setItem('isRouters', "user");
-          this.$router.addRoutes(userRouters);
+
+
+
 
           localStorage.setItem('isSlider', JSON.stringify(userSliderRouters));
           this.$message({
@@ -112,6 +111,7 @@ export default {
           });
           // 
           this.$router.push('/');
+
 
         }
 

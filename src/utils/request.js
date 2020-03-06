@@ -8,19 +8,15 @@ const service = axios.create({
     // easy-mock服务挂了，暂时不使用了
 
     //   baseURL: 'http://api.huanggr.cn/adminapi/',
-    //baseURL: 'http://system.huanggr.cn/adminapi/',
+    //baseURL: 'http://system.huanggr.cn/',
     baseURL: 'http://www.student.com/',
 
     timeout: 5000,
-    // headers: { 'Content-type': 'application/json; charset=utf-8' },
 
 });
 service.interceptors.request.use(
     config => {
-        // console.log('config===', config)
-        // config.headers['Content-Type'] = 'application/json; charset=utf-8'
-        // config.headers['x-Type'] = 'application/x-www-form-urlencoded'
-        config.headers['X-Token'] = 'adasdasdasdasdasdas'
+        // config.headers['X-Token'] = 'adasdasdasdasdasdas'
 
         return config;
     },
@@ -55,8 +51,7 @@ service.interceptors.response.use(
                 //失败
                 Message.error(response.data.msg);
                 localStorage.removeItem('ms_username');
-                router.push('/');
-
+                router.push('/login');
             }
             // //操作失败就需要提示一下了
             // if (response.data.msg == '操作失败!') {
