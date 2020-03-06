@@ -26,16 +26,6 @@
                   <el-input v-model.trim="ruleForm.shopkeeperWangWang" />
                 </el-form-item>
 
-                <el-form-item label="用户姓名"
-                              prop="userID">
-                  <el-select v-model="ruleForm.userID"
-                             placeholder="请选择用户姓名">
-                    <el-option :label="item.userName"
-                               v-for="item in userList"
-                               :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-
               </div>
             </el-col>
             <el-col :span="12">
@@ -151,7 +141,7 @@
 
 
 <script>
-import { UserList, getDocumentarysList, postDocumentarySave } from '../../../api/index';
+import { getUserDocumentarysList, postUserDocumentarySave } from '../../../api/index';
 
 export default {
   data () {
@@ -176,7 +166,6 @@ export default {
         remarks: "",     //备注  1
         documentaryTime: "",  //订单生产时间，后台生成
       },
-      userList: [],
       rules: {
         shopkeeperWangWang: [
           { required: true, message: '请输入店铺旺旺名称', trigger: 'blur' },
@@ -201,23 +190,11 @@ export default {
 
   methods: {
 
-    change (value) {
-    },
-    defaultTime () {
-    },
     getUser () {
-
-      UserList({ page_size: 200 }).then(res => {
-        console.log(res)
-        this.userList = res.list;
-      }).catch(function (error) {
-        this.active.error()
-
-      })
       // 判断是否有id信息，有的话就要浮现数据
 
       if (this.$route.query.id) {
-        getDocumentarysList({ id: this.$route.query.id }).then(res => {
+        getUserDocumentarysList({ id: this.$route.query.id }).then(res => {
           console.log(res)
           this.ruleForm = res.list[0]
           if (this.ruleForm.couponStartTime) {
@@ -259,7 +236,7 @@ export default {
           console.log("this.ruleForm=", this.ruleForm)
 
 
-          postDocumentarySave(this.ruleForm).then(res => {
+          postUserDocumentarySave(this.ruleForm).then(res => {
             if (res) {
               this.$refs[formName].resetFields()
               this.active.success()

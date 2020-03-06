@@ -67,19 +67,19 @@ export const userSliderRouters = [
     title: '录单&跟单管理',
     subs: [{
         icon: 'el-icon-lx-copy',
-        index: 'addSingle',
+        index: 'uaddSingle',
         title: '添加录单'
       },
       {
         icon: 'el-icon-lx-copy',
-        index: 'documentary',
+        index: 'udocumentary',
         title: '跟单列表'
       },
     ]
   },
   {
     icon: 'el-icon-lx-copy',
-    index: 'performance',
+    index: 'uperformance',
     title: '业绩概括'
   },
 

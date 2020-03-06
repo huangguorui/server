@@ -26,7 +26,7 @@
                   <el-input v-model.trim="ruleForm.shopkeeperWangWang" />
                 </el-form-item>
 
-                <el-form-item label="用户姓名"
+                <!-- <el-form-item label="用户姓名"
                               prop="userID">
                   <el-select v-model="ruleForm.userID"
                              placeholder="请选择用户姓名">
@@ -34,7 +34,7 @@
                                v-for="item in userList"
                                :value="item.id"></el-option>
                   </el-select>
-                </el-form-item>
+                </el-form-item> -->
 
               </div>
             </el-col>
@@ -54,16 +54,6 @@
                               prop="shopName">
                   <el-input v-model="ruleForm.shopName" />
                 </el-form-item>
-
-                <!-- <el-form-item label="有无优惠券">
-                  <el-input v-model="ruleForm.name" />
-                </el-form-item> -->
-                <!-- <el-form-item label="有无优惠券">
-                  <el-radio-group v-model="ruleForm.resource">
-                    <el-radio label="无" />
-                    <el-radio label="有" />
-                  </el-radio-group>
-                </el-form-item> -->
 
                 <el-form-item label="优惠券链接"
                               prop="couponLink">
@@ -151,7 +141,7 @@
 
 
 <script>
-import { UserList, getDocumentarysList, postDocumentarySave } from '../../../api/index';
+import { postUserDocumentarySave } from '../../../api/index';
 
 export default {
   data () {
@@ -189,20 +179,10 @@ export default {
     };
   },
   created () {
-    this.getUser()
   },
 
   methods: {
 
-    getUser () {
-      UserList({ page_size: 200 }).then(res => {
-        console.log(res)
-        this.userList = res.list;
-      }).catch(function (error) {
-        this.active.error()
-
-      })
-    },
     submitForm (formName) {
 
       this.$refs[formName].validate((valid) => {
@@ -230,24 +210,21 @@ export default {
             this.ruleForm.activityEndTime = ''
           }
 
-
           console.log("this.ruleForm=", this.ruleForm)
 
-
-          postDocumentarySave(this.ruleForm).then(res => {
+          postUserDocumentarySave(this.ruleForm).then(res => {
             if (res) {
               this.$refs[formName].resetFields()
               this.active.success()
 
               if (this.$route.query.id) {
                 this.$router.push({  //核心语句
-                  path: '/documentary',   //跳转的路径
+                  path: '/udocumentary',   //跳转的路径
                   query: {           //路由传参时push和query搭配使用 ，作用时传递参数
                   }
                 })
               }
 
-              this.getDate()
             }
 
           })
@@ -268,12 +245,6 @@ export default {
       let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
       return youWant
     },
-    //格式化时间
-    // formatDate (dataTime) {
-    //   var d = new Date(dataTime);
-    //   let youWant = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-    //   return youWant
-    // },
 
   }
 }

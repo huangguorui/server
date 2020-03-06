@@ -102,15 +102,6 @@ export const getExcelExport = query => {
 
 
 
-//管理员登录
-export const getAdminLogin = query => {
-    return request({
-        url: '/adminapi/user/admin-login',
-        method: 'get',
-        params: query
-    });
-};
-
 
 
 //excel导入
@@ -124,6 +115,43 @@ export const OneSubjectImport = query => {
 
 
 
+//管理员登录
+export const getAdminLogin = query => {
+    return request({
+        url: '/other/user/admin-login',
+        method: 'get',
+        params: query
+    });
+};
+
+//用户登录
+
+export const getUserLogin = query => {
+    return request({
+        url: '/other/user/user-login',
+        method: 'get',
+        params: query
+    });
+};
+
+//用户登出
+export const getUserLoginOut = query => {
+    return request({
+        url: '/other/user/user-login-out',
+        method: 'get',
+        params: query
+    });
+};
+
+//管理员用户退出
+export const getAdminLoginOut = query => {
+    return request({
+        url: '/other/user/admin-login-out',
+        method: 'get',
+        params: query
+    });
+};
+getAdminLoginOut
 
 
 
@@ -135,6 +163,15 @@ export const getUserDocumentarysList = query => {
     return request({
         url: '/api/documentary/documentary-list',
         method: 'get',
+        params: query
+    });
+};
+
+//添加 and 编辑跟单记录
+export const postUserDocumentarySave = query => {
+    return request({
+        url: '/api/documentary/documentary-save',
+        method: 'post',
         params: query
     });
 };

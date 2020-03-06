@@ -70,10 +70,10 @@ export default {
     let isRouter = localStorage.getItem('isRouters')
     //router添加
     if (isRouter == "admin") {
-      this.$router.addRoutes(adminRouters);
+      // this.$router.addRoutes(adminRouters);
     } else
       if (isRouter == "user") {
-        this.$router.addRoutes(userRouters);
+      //  this.$router.addRoutes(userRouters);
 
       } else {
         console.log('未登录')

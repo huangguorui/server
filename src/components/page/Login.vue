@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getAdminLogin, UserList } from './../../api/index';
+import { getAdminLogin, getUserLogin } from './../../api/index';
 
 
 import { adminRouters, userRouters } from "./../../utils/route"
@@ -77,11 +77,10 @@ export default {
       getAdminLogin(this.param).then(res => {
         if (res) {
           localStorage.setItem('ms_username', this.param.userPhone);
-          localStorage.setItem('token', res.token);
+          //  localStorage.setItem('token', res.token);
           //添加相对于的路由
           localStorage.setItem('isRouters', "admin");
-          this.$router.addRoutes(adminRouters);
-
+          // this.$router.addRoutes(adminRouters);
           localStorage.setItem('isSlider', JSON.stringify(adminSliderRouters));
           this.$message({
             message: '登录成功',
@@ -97,7 +96,7 @@ export default {
     //普通用户登录
     isUser () {
 
-      getAdminLogin(this.param).then(res => {
+      getUserLogin(this.param).then(res => {
         if (res) {
           localStorage.setItem('ms_username', this.param.userPhone);
           localStorage.setItem('token', res.token);

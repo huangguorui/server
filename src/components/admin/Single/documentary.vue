@@ -133,7 +133,8 @@
         <el-table-column prop="commission"
                          label="佣金+服务费%"></el-table-column>
         <el-table-column prop="documentaryTime"
-                         label="添加时间"></el-table-column>
+                         label="添加时间"
+                         width="150"></el-table-column>
 
         <el-table-column prop="activityID"
                          label="活动ID"></el-table-column>
@@ -207,7 +208,7 @@
 import interList from '@/common/mixins/list'
 import set from '@/common/mixins/set'
 
-import { UserSave, postDocumentaryDel, getDocumentarysList, UserList } from '../../../api/index';
+import { postDocumentaryDel, getDocumentarysList, UserList } from '../../../api/index';
 export default {
   name: 'getDocumentarysList',
   data () {
@@ -281,13 +282,6 @@ export default {
   mixins: [interList],
   created () {
 
-    // UserList({ page_size: 100 }).then(res => {
-    //   this.userList = res.list;
-
-    // }).catch(function (error) {
-    //   this.active.error()
-    // })
-
   },
   methods: {
     isHidden (i, row) {
@@ -305,31 +299,6 @@ export default {
         }
       })
     },
-    applySubmit (data, formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          UserSave(data).then(res => {
-            //清空数据
-            this.$refs[formName].resetFields()
-            if (res) {
-              this.getData()
-            } else {
-              this.active.success()
-              this.getData()
-            }
-          })
-          this.isShowDrawer = false
-
-        } else {
-          return false;
-        }
-
-
-      });
-    },
-    closeDraw (data) {
-
-    },
     getData () {
       let _this = this
       this.loading = true
@@ -339,9 +308,13 @@ export default {
           this.tableData[index].isShow = false
 
         })
+        //请求用户
+        UserList({ page_size: 100 }).then(res => {
+          this.userList = res.list;
 
-        console.log(this.tableData)
-
+        }).catch(function (error) {
+          this.active.error()
+        })
         this.query = res.page_info
         this.loading = false
 

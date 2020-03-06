@@ -38,7 +38,7 @@ export default {
   watch: {
     $route(to, from) {
       // console.log(to.path);
-      this.getData()
+      // this.getData()
 
     }
   },
@@ -78,7 +78,7 @@ export default {
       if (this.searchForm.couponEndTime)
         this.searchForm.couponEndTime = this.dataFormat2(this.searchForm.couponEndTime) //优惠券过期时间
       if (this.searchForm.activityEndTime)
-      
+
         this.searchForm.activityEndTime = this.dataFormat2(this.searchForm.activityEndTime) //活动结束时间
 
 

@@ -297,7 +297,7 @@ export default {
     edlt (row) {
       console.log(row)
       this.$router.push({  //核心语句
-        path: '/editSingle',   //跳转的路径
+        path: '/ueditSingle',   //跳转的路径
         query: {           //路由传参时push和query搭配使用 ，作用时传递参数
           id: row.id,
         }
@@ -316,8 +316,6 @@ export default {
               this.getData()
             }
           })
-          this.isShowDrawer = false
-
         } else {
           return false;
         }

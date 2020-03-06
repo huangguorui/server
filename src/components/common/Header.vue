@@ -40,6 +40,7 @@
         <el-dropdown class="user-name"
                      trigger="click"
                      @command="handleCommand">
+          <el-button @click="loginOut">测试退出</el-button>
           <span class="el-dropdown-link">
             {{username}}
             <i class="el-icon-caret-bottom"></i>
@@ -59,6 +60,7 @@
 </template>
 <script>
 import bus from '../common/bus';
+import { getUserLoginOut, getAdminLoginOut } from '../../api/index';
 export default {
   data () {
     return {
@@ -75,6 +77,28 @@ export default {
     }
   },
   methods: {
+
+    loginOut () {
+      //先用本地缓存做判断
+
+      let isRouter = localStorage.getItem('isRouters')
+
+
+      if (isRouter == "admin") {
+        getAdminLoginOut().then(res => {
+          this.active.success()
+        })
+      } else
+        if (isRouter == "user") {
+          getUserLoginOut().then(res => {
+            this.active.success()
+          })
+        } else {
+          console.log('未登录')
+        }
+
+    },
+
     // 用户名下拉菜单选择事件
     handleCommand (command) {
       if (command == 'loginout') {
