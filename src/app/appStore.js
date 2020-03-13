@@ -1,19 +1,30 @@
 import Router from 'vue-router';
+<<<<<<< HEAD
 import Api from './api'
+=======
+import Api from './request'
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
 import DefaultMainLayoutView from './layout/MainLayout'
 import DefaultHeaderLayoutView from './layout/Header'
 import DefaultNavLayoutView from './layout/Sidebar'
 import DefaultFooterLayoutView from './layout/Footer.vuew'
 import DefaultLoginLayoutView from './layout/Login'
+<<<<<<< HEAD
 import ActivePlugin from './active-store'
 
 class AppStore {
+=======
+
+class AppStore {
+
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
     /**
      * 构造函数
      */
     constructor(Vue, props){
         this.Vue = Vue;
         this.props = props;
+<<<<<<< HEAD
         /*
         * 主视图集合
         * */
@@ -36,10 +47,20 @@ class AppStore {
         this.globalComponents = new Map();
 
         /*所有系统API服务接口*/
+=======
+        this._userInfo = null;
+
+        this.viewsMap = new Map();
+        this.pagesMap = new Map();
+
+        this.constant = new Map();
+        this.globalComponents = new Map();
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
         this.apiServices = new Map();
 
 
         /**
+<<<<<<< HEAD
          * 全局状态 可用与 外部 有需要时条用，放入Vue中，以防止 状态更改后，页面不渲染
          * @type {Map<any, any>}
          */
@@ -138,6 +159,12 @@ class AppStore {
         } else {
             console.warn(`plugin ${name} existence`)
         }
+=======
+         * 全局状态
+         * @type {Map<any, any>}
+         */
+        this.globalStateMap = new Map();
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
     }
 
     /**
@@ -184,6 +211,19 @@ class AppStore {
         this.globalStateMap.set(name, props)
     }
 
+<<<<<<< HEAD
+=======
+
+    /**
+     * 跟新 props
+     * @param {string} name key
+     * @param {*} value 值
+     */
+    updateProps(name, value){
+        this.props[name] = value
+    }
+
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
     /**
      * 添加系统api服务
      * @param {string} name 名称

@@ -47,14 +47,22 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import {adminSetup, userSetup} from '../../components'
+=======
+import { adminSetup, userSetup } from '../../components'
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
 import { adminSliderRouters, userSliderRouters } from "./../../utils/slide"
 
 // console.log(routers)
 export default {
   data: function () {
     return {
+<<<<<<< HEAD
         service:this.appStore.getService('sysService'),
+=======
+      service: this.appStore.getService('sysService'),
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
       param: {
         userPhone: '12345678999',
         userPwd: '123456',
@@ -83,7 +91,11 @@ export default {
           });
           adminSetup(this.appStore)
           //
+<<<<<<< HEAD
             this.$router.push('/');
+=======
+          this.$router.push('/');
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
 
         }
 
@@ -100,9 +112,12 @@ export default {
 
           localStorage.setItem('isRouters', "user");
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
           localStorage.setItem('isSlider', JSON.stringify(userSliderRouters));
           this.$message({
             message: '登录成功',
