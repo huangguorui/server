@@ -101,9 +101,6 @@ export default {
 
           localStorage.setItem('isRouters', "user");
 
-
-
-
           localStorage.setItem('isSlider', JSON.stringify(userSliderRouters));
           this.$message({
             message: '登录成功',
