@@ -8,8 +8,8 @@ const service = axios.create({
     // easy-mock服务挂了，暂时不使用了
 
     //   baseURL: 'http://api.huanggr.cn/adminapi/',
-    //baseURL: 'http://system.huanggr.cn/',
-    baseURL: 'http://www.student.com/',
+    baseURL: 'http://system.huanggr.cn/',
+    // baseURL: 'http://www.system.huanggr.cn',
 
     timeout: 5000,
 
