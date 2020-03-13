@@ -58,12 +58,12 @@
 </template>
 
 <script>
-import { UserSave, UserInfo } from '../../../api/index';
 export default {
   name: 'userAdd',
   data () {
     return {
-      isShowDrawer: false,
+        service:this.appStore.getService('sysService'),
+        isShowDrawer: false,
       id: '',
       ruleForm: {
         userPhone: '',//用户电话
@@ -101,7 +101,7 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          UserSave(this.ruleForm).then(res => {
+          this.service.UserSave(this.ruleForm).then(res => {
             console.log("res=", res)
             if (res) {
               this.ruleForm = {}

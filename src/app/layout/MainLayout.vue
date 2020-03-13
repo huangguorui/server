@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
-        <v-head></v-head>
-        <v-sidebar></v-sidebar>
+        <global-header-view/>
+        <global-nav-view/>
         <div class="content-box" :class="{'content-collapse':collapse}">
             <div class="content">
                 <transition name="move" mode="out-in">
@@ -12,26 +12,18 @@
                 <el-backtop target=".content"></el-backtop>
             </div>
         </div>
+        <global-footer-view/>
     </div>
 </template>
 
 <script>
-import vHead from './Header.vue';
-import vSidebar from './Sidebar.vue';
-import vTags from './Tags.vue';
+
 import bus from './bus';
 export default {
     data() {
-        return {
-            tagsList: [],
-            collapse: false
-        };
+        return this.appStore.getGlobalState('mainLayout');
     },
-    components: {
-        vHead,
-        vSidebar,
-        vTags
-    },
+
     created() {
         bus.$on('collapse-content', msg => {
             this.collapse = msg;

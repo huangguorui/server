@@ -135,8 +135,6 @@
 import $ from 'jquery'
 
 import XLSX from 'xlsx';
-import { getExcelList, postExcelFalseDel, postExcelOrderDel, getExcelExport, OneSubjectImport, ColumnList, SubjectList, Relation } from '@/api/index';
-
 
 import interList from '@/common/mixins/list'
 // import { parseTime } from '@/utils'
@@ -158,7 +156,8 @@ export default {
         }
       ],
       excelExportData: [],
-      tableData: []
+      tableData: [],
+      service:this.appStore.getService('sysService')
     }
   },
   mixins: [interList],
@@ -177,7 +176,7 @@ export default {
       })
         .then(() => {
           this.loading = true
-          postExcelFalseDel({ id: this.DelId }).then(res => {
+          this.service.postExcelFalseDel({ id: this.DelId }).then(res => {
             this.active.success()
             this.getData()
           })
@@ -192,7 +191,7 @@ export default {
     getData () {
       let _this = this
       this.loading = true
-      getExcelList(this.query).then(res => {
+        this.service.getExcelList(this.query).then(res => {
         this.excelData = res.list;
         this.query = res.page_info
         this.loading = false
@@ -304,7 +303,7 @@ export default {
         .then(() => {
           this.loading = true
           //excel和订单统统删除
-          postExcelOrderDel({ id: this.DelId }).then(res => {
+          this.service.postExcelOrderDel({ id: this.DelId }).then(res => {
             this.active.success()
             this.getData()
           })
@@ -316,7 +315,7 @@ export default {
     },
 
     handleDownload (excelID) {
-      getExcelExport({ excelID: excelID }).then(res => {
+      this.service.getExcelExport({ excelID: excelID }).then(res => {
         this.excelExportData = res.list;
         console.log("this.excelExportData=", this.excelExportData)
         // debugger;
@@ -357,7 +356,7 @@ export default {
         this.$message.error('请添加业绩表后在点击上传')
         return false;
       }
-      OneSubjectImport({ data: this.tableData, defaultFileName: this.defaultFileName }).then(res => {
+      this.service.OneSubjectImport({ data: this.tableData, defaultFileName: this.defaultFileName }).then(res => {
 
         if (res == undefined) {
 

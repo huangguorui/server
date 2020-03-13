@@ -15,7 +15,6 @@
                  ref="ruleForm"
                  label-width="120px"
                  class="demo-ruleForm">
-
           </el-form-item>
           <el-row>
             <el-col :span="12">
