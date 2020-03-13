@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import bus from '../common/bus';
+import bus from './bus';
 import slideRouters from "../../utils/slide"
 import { adminRouters, userRouters } from "../../utils/route"
 export default {

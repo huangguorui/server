@@ -21,11 +21,9 @@
 import bus from './bus';
 export default {
     data() {
-        return {
-            tagsList: [],
-            collapse: false
-        };
+        return this.appStore.getGlobalState('mainLayout');
     },
+
     created() {
         bus.$on('collapse-content', msg => {
             this.collapse = msg;

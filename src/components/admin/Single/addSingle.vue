@@ -15,7 +15,6 @@
                  ref="ruleForm"
                  label-width="120px"
                  class="demo-ruleForm">
-
           </el-form-item>
           <el-row>
             <el-col :span="12">
@@ -156,6 +155,7 @@ import { UserList, getDocumentarysList, postDocumentarySave } from '../../../api
 export default {
   data () {
     return {
+      service: this.appStore.getService('sysService'),
       documentaryID: -1,
       ruleForm: {
         id: '',
@@ -234,7 +234,7 @@ export default {
           console.log("this.ruleForm=", this.ruleForm)
 
 
-          postDocumentarySave(this.ruleForm).then(res => {
+          this.service.postDocumentarySave(this.ruleForm).then(res => {
             if (res) {
               this.$refs[formName].resetFields()
               this.active.success()

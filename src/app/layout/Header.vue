@@ -58,15 +58,16 @@
   </div>
 </template>
 <script>
-import bus from '../common/bus';
-import { getUserLoginOut, getAdminLoginOut } from '../../api/index';
+import bus from './bus';
+
 export default {
   data () {
     return {
       collapse: false,
       fullscreen: false,
       name: 'linxin',
-      message: 2
+      message: 2,
+        service:this.appStore.getService('sysService')
     };
   },
   computed: {
@@ -84,12 +85,12 @@ export default {
         let isRouter = localStorage.getItem('isRouters')
 
         if (isRouter == "admin") {
-          getAdminLoginOut().then(res => {
+            this.service.getAdminLoginOut().then(res => {
             this.active.success()
           })
         } else
           if (isRouter == "user") {
-            getUserLoginOut().then(res => {
+            this.service.getUserLoginOut().then(res => {
               this.active.success()
             })
           }

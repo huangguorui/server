@@ -58,11 +58,11 @@
 </template>
 
 <script>
-import { UserSave, UserInfo } from '../../../api/index';
 export default {
   name: 'userAdd',
   data () {
     return {
+      service: this.appStore.getService('sysService'),
       isShowDrawer: false,
       id: '',
       ruleForm: {
@@ -101,17 +101,12 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          UserSave(this.ruleForm).then(res => {
-            console.log("res=", res)
+          this.service.UserSave(this.ruleForm).then(res => {
             if (res) {
               this.ruleForm = {}
               this.active.success()
             }
-
           });
-        } else {
-          console.log('error submit!!');
-          return false;
         }
       });
       //重置操作

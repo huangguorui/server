@@ -47,16 +47,14 @@
 </template>
 
 <script>
-import { getAdminLogin, getUserLogin } from './../../api/index';
-
-
-import { adminRouters, userRouters } from "./../../utils/route"
+import { adminSetup, userSetup } from '../../components'
 import { adminSliderRouters, userSliderRouters } from "./../../utils/slide"
 
 // console.log(routers)
 export default {
   data: function () {
     return {
+      service: this.appStore.getService('sysService'),
       param: {
         userPhone: '12345678999',
         userPwd: '123456',
@@ -74,7 +72,7 @@ export default {
   methods: {
     //管理员登录
     isAdmin () {
-      getAdminLogin(this.param).then(res => {
+      this.service.getAdminLogin(this.param).then(res => {
         if (res) {
           localStorage.setItem('ms_username', this.param.userPhone);
           localStorage.setItem('isRouters', "admin");
@@ -83,7 +81,8 @@ export default {
             message: '登录成功',
             type: 'success'
           });
-          // 
+          adminSetup(this.appStore)
+          //
           this.$router.push('/');
 
         }
@@ -93,16 +92,13 @@ export default {
     //普通用户登录
     isUser () {
 
-      getUserLogin(this.param).then(res => {
+      this.service.getUserLogin(this.param).then(res => {
         if (res) {
           localStorage.setItem('ms_username', this.param.userPhone);
           localStorage.setItem('token', res.token);
           //添加相对于的路由
 
           localStorage.setItem('isRouters', "user");
-
-
-
 
           localStorage.setItem('isSlider', JSON.stringify(userSliderRouters));
           this.$message({
