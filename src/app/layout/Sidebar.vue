@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <el-menu class="sidebar-el-menu abc"
+    <el-menu class="sidebar-el-menu"
              :default-active="onRoutes"
              :collapse="collapse"
              background-color="#324157"
