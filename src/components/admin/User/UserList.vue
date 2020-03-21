@@ -90,18 +90,18 @@
 
       <!-- <pagination :page-info="query"></pagination> -->
       <el-pagination background
-                     layout="total, prev, pager, next"
-                     :current-page="query.page"
-                     :page-size="query.page_size"
-                     :total="query.count"
-                     @current-change="handlePageChange"></el-pagination>
+                       layout="total, prev, pager, next"
+                       :current-page="query.page"
+                       :page-size="query.page_size"
+                       :total="query.count"
+                       @current-change="handlePageChange"></el-pagination>
 
     </div>
-    <global-DrawerModel-view :for-data="formData"
-                             @closeDraw="closeDraw"
-                             :drawerTitle="drawerTitle "
-                             @applySubmit="applySubmit"
-                             :isDrawer.sync="isShowDrawer">
+    <DrawerModel :for-data="formData"
+                 @closeDraw="closeDraw"
+                 :drawerTitle="drawerTitle "
+                 @applySubmit="applySubmit"
+                 :isDrawer.sync="isShowDrawer">
       <template slot="header">
         <el-form :model="formData"
                  :rules="rules"
@@ -121,14 +121,15 @@
           </el-form-item>
           <!-- @on-change="formData.user_birthday=$event" -->
 
-          <el-form-item label="用户密码">
+          <el-form-item label="用户密码"
+                       >
             <el-input v-model="formData.userPwd"></el-input>
           </el-form-item>
           </el-form-item>
 
         </el-form>
       </template>
-    </global-DrawerModel-view>
+    </DrawerModel>
   </div>
 </template>
 
@@ -141,7 +142,6 @@ export default {
   name: 'userList',
   data () {
     return {
-      service: this.appStore.getService('sysService'),
       formData: {
         userPhone: '',//用户电话
         userName: '',//用户真实姓名
@@ -188,7 +188,7 @@ export default {
     applySubmit (data, formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.service.UserSave(data).then(res => {
+          UserSave(data).then(res => {
             //清空数据
             this.$refs[formName].resetFields()
             if (res) {
@@ -211,18 +211,17 @@ export default {
 
     },
     getData () {
-
-
       let _this = this
       this.loading = true
-      this.service.UserList(this.query).then(res => {
-
+      UserList(this.query).then(res => {
         this.tableData = res.list;
         this.query = res.page_info
         this.loading = false
+
+      }).catch(function (error) {
+        this.active.error()
+        _this.loading = false
       })
-
-
     },
     //单选多选都可删除
     delAllSelection (id, flag) {
@@ -237,7 +236,7 @@ export default {
       })
         .then(() => {
           this.loading = true
-          this.service.UserDel({ id: this.DelId }).then(res => {
+          UserDel({ id: this.DelId }).then(res => {
             this.active.success()
             this.getData()
           })

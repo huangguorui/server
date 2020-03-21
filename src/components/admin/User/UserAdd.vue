@@ -62,13 +62,8 @@ export default {
   name: 'userAdd',
   data () {
     return {
-<<<<<<< HEAD
         service:this.appStore.getService('sysService'),
         isShowDrawer: false,
-=======
-      service: this.appStore.getService('sysService'),
-      isShowDrawer: false,
->>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
       id: '',
       ruleForm: {
         userPhone: '',//用户电话
@@ -107,15 +102,16 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.service.UserSave(this.ruleForm).then(res => {
-<<<<<<< HEAD
             console.log("res=", res)
-=======
->>>>>>> 4aed04c57867b1ad1038d86b1ca0a6e0c19a951f
             if (res) {
               this.ruleForm = {}
               this.active.success()
             }
+
           });
+        } else {
+          console.log('error submit!!');
+          return false;
         }
       });
       //重置操作

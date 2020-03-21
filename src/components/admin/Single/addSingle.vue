@@ -155,7 +155,6 @@ import { UserList, getDocumentarysList, postDocumentarySave } from '../../../api
 export default {
   data () {
     return {
-      service: this.appStore.getService('sysService'),
       documentaryID: -1,
       ruleForm: {
         id: '',
@@ -234,7 +233,7 @@ export default {
           console.log("this.ruleForm=", this.ruleForm)
 
 
-          this.service.postDocumentarySave(this.ruleForm).then(res => {
+          postDocumentarySave(this.ruleForm).then(res => {
             if (res) {
               this.$refs[formName].resetFields()
               this.active.success()
